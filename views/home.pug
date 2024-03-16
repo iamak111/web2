@@ -1,0 +1,113 @@
+extends layout/base
+
+block block 
+    section
+        #carouselExampleDark.carousel.carousel-dark.slide
+            .carousel-indicators
+                button.active(type='button' data-bs-target='#carouselExampleDark' data-bs-slide-to='0' aria-current='true' aria-label='Slide 1')
+                button(type='button' data-bs-target='#carouselExampleDark' data-bs-slide-to='1' aria-label='Slide 2')
+                button(type='button' data-bs-target='#carouselExampleDark' data-bs-slide-to='2' aria-label='Slide 3')
+            .carousel-inner
+                .carousel-item.active(data-bs-interval='10000')
+                    img.d-block.w-100(src='https://cropslist.com/images/banners/1/main-4.display.jpg?nc=1707112135' alt='...')
+                    .carousel-caption.d-none.d-md-block.text-start
+                        h5.fs-1.text-white.fw-bold First slide label
+                        p.text-white.fs-5.fw-bold
+                            | Some representative placeholder content for the first slide.
+                        a.btn-second.fs-5.fw-bold.rounded-pill(href='#') Start shopping now
+                .carousel-item(data-bs-interval='2000')
+                    img.d-block.w-100(src='https://cropslist.com/images/banners/1/main-5.display.jpg?nc=1707112135' alt='...')
+                    .carousel-caption.d-none.d-md-block.text-start
+                        h5.fs-1.text-white.fw-bold First slide label
+                        p.text-white.fs-5.fw-bold
+                            | Some representative placeholder content for the first slide.
+                        a.btn-second.fs-5.fw-bold.rounded-pill(href='#') Start shopping now
+                .carousel-item
+                    img.d-block.w-100(src='https://cropslist.com/images/banners/1/main-6.display.jpg?nc=1707112135' alt='...')
+                    .carousel-caption.d-none.d-md-block.text-start
+                        h5.fs-1.text-white.fw-bold First slide label
+                        p.text-white.fs-5.fw-bold
+                            | Some representative placeholder content for the first slide.
+                        a.btn-second.fs-5.fw-bold.rounded-pill(href='#') Start shopping now
+            button.carousel-control-prev(type='button' data-bs-target='#carouselExampleDark' data-bs-slide='prev')
+                span.carousel-control-prev-icon(aria-hidden='true')
+                span.visually-hidden Previous
+            button.carousel-control-next(type='button' data-bs-target='#carouselExampleDark' data-bs-slide='next')
+                span.carousel-control-next-icon(aria-hidden='true')
+                span.visually-hidden Next
+    section.container.pb-5
+        h1.text-center.text-secondary.fw-bold.mt-5
+            | Now shipping everywhere in Ghana
+        .row.row-cols-2.row-cols-md-4.g-4.mt-4
+            each doc in docs.recommendedProduct
+                .col
+                    .card.h-100.border-0.bg-light
+                        .d-flex.justify-content-between.p-2.border-bottom
+                            i.bi.bi-tree.fs-5
+                            h5.text-dark.one-line= doc.name
+                            i.bi.bi-shop.fs-5
+                        a.ps-5.pe-5.mt-2(href=`/shop/product/${doc.slug}`)
+                            h5.text-dark.one-line.text-center= doc.category
+                            img.card-img-top(src=doc.bannerImage alt='...')
+                            if doc.discountPrice
+                                h5.p-0.m-0.text-center.mt-2.text-dark.pe-2
+                                    | Rs.#{doc.discountPrice}
+                                    span.text-secondary.fw-normal.text-decoration-line-through.product-des.pe-2.ps-2 Rs.#{doc.price}
+                                    span.fw-normal.main-light.product-des.pe-2
+                                        | (#{Math.floor(((doc.price-doc.discountPrice)/doc.price)*100)}% OFF)
+                            else
+                                p.p-0.m-0.fw-bold.text-center.mt-2.pe-2
+                                    | Rs.#{doc.price}
+                        //- .p-2
+                            select.form-select.border-dark(aria-label='Default select example')
+                                option(selected='') Open this select menu
+                                option(value='1') One
+                                option(value='2') Two
+                                option(value='3') Three
+                        .row
+                            .col-sm-6
+                                .d-flex.justify-content-center
+                                    p.m-0.cursor-pointer.border.border-2.border-dark.p-1.ps-2.me-1.pe-2.text-center.rounded.sub_quantity
+                                        | -
+                                    p.m-0.card-text.border.border-2.border-dark.p-1.text-center.rounded.ps-3.pe-3.count_quantity
+                                        | 1
+                                    p.m-0.cursor-pointer.border.p-0.border-2.border-dark.p-1.ps-2.ms-1.pe-2.text-center.rounded.add_quantity
+                                        | +
+                            .col-sm-6.d-flex.justify-content-center
+                                a.cursor-pointer.btn-main.rounded.fw-bold.mt-1.add_to_cart(data-id=doc.ecmpeId) Add to cart
+    section.bg-light
+        .container.pt-5.pb-5
+            h3.text-center.fw-bold.text-dark
+                | Cropslist, Beyond Trading!
+            p.text-secondary.text-center
+                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi
+                | corporis soluta maiores assumenda eligendi eveniet.
+            .row.justify-content-center
+                .col-sm-4.p-2
+                    .bg-white.text-center.p-3
+                        h5.text-dark.fw-bold Quality Assured
+                        .small-underline
+                        p
+                            | Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque
+                            | itaque voluptates eum, qui reprehenderit dolores.
+    section.bg-white
+        .container.pt-5.pb-5
+            .row.justify-content-center
+                .col-sm-4.p-2
+                    .bg-light.text-center.p-3
+                        h5.text-dark.fw-bold Quality Assured
+                        .small-underline
+                        p
+                            | Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cumque
+                            | itaque voluptates eum, qui reprehenderit dolores.
+    .container.p-4
+        .subcribe-form.bg-secondary-subtle.rounded-5.p-5
+            h1.fw-bold.text-center Our Newsletter
+            p.text-center.w-50.m-auto
+                | Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut, quia
+                | molestias veritatis iure modi omnis!
+            form#subscribe(novalidate='true')
+                input#subscribe-email.enteremail.rounded-pill(name='EMAIL' placeholder='Enter your email address...' spellcheck='false' type='text')
+                button#subscribe-button.subscribe-button.bg-main.rounded-pill(type='submit')
+                    p
+                        i.bi.bi-send-fill.fs-4.text-white.fw-bold Send

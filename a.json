@@ -1,0 +1,267 @@
+[
+    {
+        "_id": "64d7bee3751d04b9d4f03aab",
+        "name": "Colors with size products",
+        "vendorId": "64cf175ed495fb5c08496243",
+        "vendorEId": "e082f7de-f5a2-5dd6-b2b2-290addea7ee4",
+        "slug": "colors-with-size-products",
+        "active": true,
+        "price": 200,
+        "discountPrice": 90,
+        "categorie": "Toys",
+        "for": "themobsterstash",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore sunt eos vitae minima, sit quo illum praesentium doloremque facere atque nihil dolore voluptatem. Saepe aliquam optio pariatur nobis odio illo id porro fuga quasi dignissimos commodi soluta sunt, dolore doloribus.",
+        "productType": "colorWithSize",
+        "bannerImage": "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg",
+        "imageGallery": [
+            "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg"
+        ],
+        "productDetails": [
+            {
+                "bannerImage": "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg",
+                "imageGallery": [
+                    "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg"
+                ],
+                "color": "red",
+                "subDetails": [
+                    {
+                        "size": "M",
+                        "price": 200,
+                        "discountPrice": 90,
+                        "ecmpssId": "58d5d1b9-65e9-54d3-b75b-6fb06361ee18",
+                        "_id": "64d7bee3751d04b9d4f03aad"
+                    },
+                    {
+                        "size": "L",
+                        "price": 400,
+                        "discountPrice": 200,
+                        "ecmpssId": "88baf5c6-bf39-5726-9f2b-ed46530e0759",
+                        "_id": "64d7bee3751d04b9d4f03aae"
+                    }
+                ],
+                "ecmpsId": "18b1f4f2-2239-526b-8044-6b177bbf8869",
+                "_id": "64d7bee3751d04b9d4f03aac"
+            },
+            {
+                "bannerImage": "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg",
+                "imageGallery": [
+                    "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg"
+                ],
+                "color": "black",
+                "subDetails": [
+                    {
+                        "size": "M",
+                        "price": 200,
+                        "discountPrice": 90,
+                        "ecmpssId": "c7a17cb9-8694-5112-8b4d-1a7cbdc995b6",
+                        "_id": "64d7bee3751d04b9d4f03ab0"
+                    },
+                    {
+                        "size": "L",
+                        "price": 400,
+                        "discountPrice": 200,
+                        "ecmpssId": "0e91c96d-3fdd-5659-975e-5a9c975b8ba2",
+                        "_id": "64d7bee3751d04b9d4f03ab1"
+                    }
+                ],
+                "ecmpsId": "0a587643-5603-567f-83fb-c42ba83dec03",
+                "_id": "64d7bee3751d04b9d4f03aaf"
+            }
+        ],
+        "features": [
+            {
+                "title": "A",
+                "description": "B",
+                "_id": "64d7bee3751d04b9d4f03ab2"
+            }
+        ],
+        "specification": [
+            {
+                "title": "A",
+                "description": "B",
+                "_id": "64d7bee3751d04b9d4f03ab3"
+            }
+        ],
+        "ratingsAverage": 0,
+        "ratingsQuantity": 0,
+        "verified": true,
+        "ecmpeId": "1d546a37-df6a-555f-801d-c3cb38d821ce",
+        "dealOfTheDay": false,
+        "createdAt": "2023-08-12T17:18:27.856Z",
+        "updatedAt": "2023-08-12T17:18:27.856Z",
+        "__v": 0,
+        "sortingField": 90
+    },
+    {
+        "_id": "64d7bed8751d04b9d4f03a92",
+        "name": "size only products",
+        "vendorId": "64cf175ed495fb5c08496243",
+        "vendorEId": "e082f7de-f5a2-5dd6-b2b2-290addea7ee4",
+        "slug": "size-only-products",
+        "active": true,
+        "price": 200,
+        "discountPrice": 90,
+        "categorie": "Toys",
+        "for": "themobsterstash",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore sunt eos vitae minima, sit quo illum praesentium doloremque facere atque nihil dolore voluptatem. Saepe aliquam optio pariatur nobis odio illo id porro fuga quasi dignissimos commodi soluta sunt, dolore doloribus.",
+        "productType": "sizeOnly",
+        "bannerImage": "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg",
+        "imageGallery": [
+            "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg"
+        ],
+        "productDetails": [
+            {
+                "bannerImage": "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg",
+                "imageGallery": [
+                    "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg"
+                ],
+                "subDetails": [
+                    {
+                        "size": "M",
+                        "price": 200,
+                        "discountPrice": 90,
+                        "ecmpssId": "25fe2e50-84be-548a-829d-15ded6df6603",
+                        "_id": "64d7bed8751d04b9d4f03a94"
+                    },
+                    {
+                        "size": "L",
+                        "price": 400,
+                        "discountPrice": 200,
+                        "ecmpssId": "e37356bf-373c-5e8b-b0a8-dbe764850ee3",
+                        "_id": "64d7bed8751d04b9d4f03a95"
+                    }
+                ],
+                "ecmpsId": "c24cb8ab-25ac-533b-9b2e-fbabe6ba90ae",
+                "_id": "64d7bed8751d04b9d4f03a93"
+            }
+        ],
+        "features": [
+            {
+                "title": "A",
+                "description": "B",
+                "_id": "64d7bed8751d04b9d4f03a96"
+            }
+        ],
+        "specification": [
+            {
+                "title": "A",
+                "description": "B",
+                "_id": "64d7bed8751d04b9d4f03a97"
+            }
+        ],
+        "ratingsAverage": 0,
+        "ratingsQuantity": 0,
+        "verified": true,
+        "ecmpeId": "986c1049-a492-56f3-b12b-82863f1ad9dd",
+        "dealOfTheDay": false,
+        "createdAt": "2023-08-12T17:18:16.132Z",
+        "updatedAt": "2023-08-12T17:18:16.132Z",
+        "__v": 0,
+        "sortingField": 90
+    },
+    {
+        "_id": "64d7be99751d04b9d4f03a7d",
+        "name": "Color only products",
+        "vendorId": "64cf175ed495fb5c08496243",
+        "vendorEId": "e082f7de-f5a2-5dd6-b2b2-290addea7ee4",
+        "slug": "color-only-products",
+        "active": true,
+        "price": 200,
+        "discountPrice": 90,
+        "categorie": "Candy",
+        "for": "themobsterstash",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore sunt eos vitae minima, sit quo illum praesentium doloremque facere atque nihil dolore voluptatem. Saepe aliquam optio pariatur nobis odio illo id porro fuga quasi dignissimos commodi soluta sunt, dolore doloribus.",
+        "productType": "colorOnly",
+        "bannerImage": "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg",
+        "imageGallery": [
+            "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg"
+        ],
+        "productDetails": [
+            {
+                "bannerImage": "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg",
+                "imageGallery": [
+                    "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg"
+                ],
+                "color": "blue",
+                "subDetails": [
+                    {
+                        "size": "not-defined",
+                        "price": 200,
+                        "discountPrice": 90,
+                        "ecmpssId": "bf208935-74cf-5309-89fe-7ce15f1617cb",
+                        "_id": "64d7be99751d04b9d4f03a7f"
+                    }
+                ],
+                "ecmpsId": "156fc274-b4fb-5dfb-8609-88c000e731e4",
+                "_id": "64d7be99751d04b9d4f03a7e"
+            }
+        ],
+        "features": [
+            {
+                "title": "A",
+                "description": "B",
+                "_id": "64d7be99751d04b9d4f03a80"
+            }
+        ],
+        "specification": [
+            {
+                "title": "A",
+                "description": "B",
+                "_id": "64d7be99751d04b9d4f03a81"
+            }
+        ],
+        "ratingsAverage": 0,
+        "ratingsQuantity": 0,
+        "verified": true,
+        "ecmpeId": "0bf19ac2-92d7-583c-aeb1-d8c57ab9b4a4",
+        "dealOfTheDay": false,
+        "createdAt": "2023-08-12T17:17:13.308Z",
+        "updatedAt": "2023-08-12T17:17:13.308Z",
+        "__v": 0,
+        "sortingField": 90
+    },
+    {
+        "_id": "64d7be7a751d04b9d4f03a6b",
+        "name": "single product",
+        "vendorId": "64cf175ed495fb5c08496243",
+        "vendorEId": "e082f7de-f5a2-5dd6-b2b2-290addea7ee4",
+        "slug": "single-product",
+        "active": true,
+        "price": 100,
+        "discountPrice": 90,
+        "categorie": "Candy",
+        "for": "themobsterstash",
+        "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore sunt eos vitae minima, sit quo illum praesentium doloremque facere atque nihil dolore voluptatem. Saepe aliquam optio pariatur nobis odio illo id porro fuga quasi dignissimos commodi soluta sunt, dolore doloribus.",
+        "productType": "single",
+        "bannerImage": "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg",
+        "imageGallery": [
+            "https://img.freepik.com/free-photo/skin-products-arrangement-wooden-blocks_23-2148761445.jpg"
+        ],
+        "features": [
+            {
+                "title": "A",
+                "description": "B",
+                "_id": "64d7be7a751d04b9d4f03a6c"
+            }
+        ],
+        "specification": [
+            {
+                "title": "A",
+                "description": "B",
+                "_id": "64d7be7a751d04b9d4f03a6d"
+            }
+        ],
+        "ratingsAverage": 0,
+        "ratingsQuantity": 0,
+        "verified": true,
+        "ecmpeId": "85c47186-e010-587a-8659-9a2a4dc279e2",
+        "dealOfTheDay": true,
+        "dealOfTheDayStartsAt": "2023-08-12T17:16:42.726Z",
+        "dealOfTheDayExpires": "2023-08-12T18:29:59.999Z",
+        "productDetails": [],
+        "createdAt": "2023-08-12T17:16:42.729Z",
+        "updatedAt": "2023-08-12T17:16:42.729Z",
+        "__v": 0,
+        "sortingField": 90
+    }
+]

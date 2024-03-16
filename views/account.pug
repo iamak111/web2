@@ -1,0 +1,277 @@
+extends layout/base
+
+block block
+    // Add address Modal
+    #staticBackdrop.modal.fade(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true')
+        .modal-dialog.modal-dialog-scrollable
+            .modal-content
+                .modal-header
+                    h1#staticBackdropLabel.modal-title.fs-5
+                        | Add a new address
+                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                .modal-body
+                    form#add_new_address
+                        label.form-label.fw-bold.mt-3(for='name') Full name (First and Last name)
+                        input#name.form-control.input-shadow(type='text' placeholder='Full name' required='')
+                        label.form-label.fw-bold.mt-3(for='phone') Mobile number 1
+                        input#phone.form-control.input-shadow(type='text' placeholder='Mobile number' required='')
+                        label.form-label.fw-bold.mt-3(for='phone1') Mobile number 2
+                        input#phone1.form-control.input-shadow(type='text' placeholder='Mobile number 2' required='')
+                        label.form-label.fw-bold.mt-3(for='country') Country
+                        input#country.form-control.input-shadow(type='text' placeholder='Country' required='')
+                        label.form-label.fw-bold.mt-3(for='streetAddress') Flat, House no., Building, Company, Apartment
+                        input#streetAddress.form-control.input-shadow(type='text' placeholder='' required='')
+                        label.form-label.fw-bold.mt-3(for='town') Town
+                        input#town.form-control.input-shadow(type='text' placeholder='' required='')
+                        label.form-label.fw-bold.mt-3(for='state') State
+                        input#state.form-control.input-shadow(type='text' placeholder='' required='')
+                        label.form-label.fw-bold.mt-3(for='zip') Zipcode
+                        input#zip.form-control.input-shadow(type='text' placeholder='6 digits [0-9]Pin' required='')
+                        label.form-label.fw-bold.mt-3(for='landmark') Landmark
+                        input#landmark.form-control.input-shadow(type='text' placeholder='' required='')
+                        button.btn.buy-now.d-block.w-50.m-auto.mt-3(type='submit')
+                            | Add Address
+
+    // Accunt Management Section
+    .pt-4.bg-white
+        .container
+            h5.color-t.fw-bold.mb-3.text-center.mt-4  Manage your account
+            // Mobile Nav
+            ul#v-pills-tab.nav.nav-pills.nav-fill.mb-3.display-none-web(role='tablist')
+                li.nav-item(role='presentation')
+                    button#v-pills-home-tab.nav-link.active(data-bs-toggle='pill' data-bs-target='#v-pills-home' type='button' role='tab' aria-controls='v-pills-home' aria-selected='true')
+                        | Profile
+                li.nav-item(role='presentation')
+                    button#v-pills-profile-tab.nav-link(data-bs-toggle='pill' data-bs-target='#v-pills-profile' type='button' role='tab' aria-controls='v-pills-profile' aria-selected='false')
+                        | Manage Address
+                li.nav-item(role='presentation')
+                    button#v-pills-disabled-tab.nav-link(data-bs-toggle='pill' data-bs-target='#v-pills-disabled' type='button' role='tab' aria-controls='v-pills-disabled' aria-selected='false')
+                        | Manage Order
+                li.nav-item(role='presentation')
+                    a#v-pills-contact-tab.nav-link(href="/logout" role='tab' aria-controls='v-pills-settings' aria-selected='false')
+                        | Logout
+            .d-flex.align-items-start.border-top.pt-2
+                #v-pills-tabContent.tab-content.ms-3.bg-white.p-3.width-100
+                    // Profile Section
+                    #v-pills-home.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='v-pills-home-tab' tabindex='0')
+                        .d-flex.justify-content-between
+                            .d-flex
+                                div
+                                    img.w-100.m-0(src=user.profile alt='mouse corsair' style="height: 200px; width: 200px")
+                                div
+                                    h6.fw-bold.ms-3.mt-1= user.name
+                                    p.m-0.p-0.ms-3
+                                        | Email:
+                                        span.text-secondary= user.email ? user.email : "-"
+                                    p.m-0.p-0.ms-3
+                                        | Phone:
+                                        span.text-secondary= user.phone
+                            div
+                                a.wishlist-add.d-block.text-center.me-3.ms-0(data-bs-toggle='modal' data-bs-target='#edit_user') Edit
+                                #edit_user.modal.fade(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='edit_userLabel' aria-hidden='true')
+                                    .modal-dialog.modal-dialog-scrollable
+                                        .modal-content
+                                            .modal-header
+                                                h1#edit_userLabel.modal-title.fs-5
+                                                    | Add a new address
+                                                button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                            .modal-body
+                                                form#udpate_user
+                                                    label.form-label.fw-bold.mt-3(for='name') Name
+                                                    input#u_name.form-control.input-shadow(type='text' placeholder='Full name' value=user.name required='')
+                                                    label.form-label.fw-bold.mt-3(for='name') Phone Number
+
+                                                    input.form-control.input-shadow(type='text' placeholder='Phone' value=user.phone required='' disabled)
+
+                                                    label.form-label.fw-bold.mt-3(for='email') Email
+                                                    input#u_email.form-control.input-shadow(type='email' placeholder='example@gmail.com' value=user.email )
+
+                                                    button.btn.buy-now.d-block.w-50.m-auto.mt-3(type='submit')
+                                                        | Update User
+                        hr.ms-2.me-2
+                        .row
+                            .col-md-6
+                                a(href='/wishlist')
+                                    .d-flex.p-4.border.rounded.account-card
+                                        i.bi.bi-heart-fill.fs-4.main-color
+                                        h6.fw-bold.ms-4.mt-2.text-dark My Wishlist
+                            .col-md-6
+                                a(href='/cart')
+                                    .d-flex.p-4.border.rounded.account-card
+                                        i.bi.bi-basket3-fill.fs-4.main-color
+                                        h6.fw-bold.ms-4.mt-2.text-dark My Cart
+                        hr.ms-2.me-2
+                        h6.fw-bold.ms-4.mt-2.text-dark My latest Order
+                        -const order = docs.orders[0];
+                        if !!order
+                            .p-2.border.rounded
+                                .row.m-2
+                                    .col-sm-6
+                                        h6.fw-bold
+                                            | Order Id: #{order.ecmorId} 
+                                            span.text-success  #{order.orderDetails.orderStatus}
+                                        p
+                                            | Date: 
+                                            span.text-secondary= new Date(order.createdAt).toLocaleString()
+                                    hr
+                                    .row
+                                        .col-md-4
+                                            p.fw-bold.p-0.m-0 Contact
+                                            p.p-0.m-0 Name : #{order.productDetails.vendorId.name}
+                                            p.p-0.m-0 Email: #{order.productDetails.vendorId.email ? order.productDetails.vendorId.email : "-"}
+                                            //- p.p-0.m-0 Phone: +91 99999 99999
+                                        .col-md-4
+                                            p.fw-bold.p-0.m-0 Shiping Addresss
+                                            p.p-0.m-0 #{order.userAddress.streetAddress}, #{order.userAddress.town}, #{order.userAddress.state}, #{order.userAddress.country} - #{order.userAddress.zip}(land Mark - #{order.userAddress.landmark})
+                                        .col-md-4
+                                            p.fw-bold.p-0.m-0 Payment
+                                            p.text-success.p-0.m-0 Cash
+                                            p.p-0.m-0 Shipping Fee: $ -
+                                            p.p-0.m-0 Total Paid: $ #{order.productDetails.discountPrice ? order.productDetails.discountPrice : order.productDetails.price}
+                                        hr.mt-2
+                                        .row
+                                            .col-md-5
+                                                .row
+                                                    .col-5
+                                                        img.w-100.m-0(src=order.productDetails.bannerImage alt='mouse corsair')
+                                                    .col-7
+                                                        h6.text-dark=order.productDetails.name
+                                                        h6.fw-bold Rs. #{order.productDetails.discountPrice ? order.productDetails.discountPrice : order.productDetails.price}
+
+                                                        h6.fw-bold 
+                                            .col-md-7
+                                                p.fw-bold.p-0.m-0 Tracking
+                                                .row.mt-3
+                                                    .row.justify-content-between
+                                                        .order-tracking.completed
+                                                            span.is-complete
+                                                            p
+                                                                | Ordered
+                                                                br
+                                                                span=new Date(order.createdAt).toLocaleString()
+                                                        .order-tracking
+                                                            span.is-complete
+                                                            p
+                                                                | Shipped
+                                                                //- br
+                                                                //- span Tue, June 25
+                                                        .order-tracking
+                                                            span.is-complete
+                                                            p
+                                                                | Delivered
+                                                                //- br
+                                                                //- span Fri, June 28
+                                                                // Address Section
+                    #v-pills-profile.tab-pane.fade(role='tabpanel' aria-labelledby='v-pills-profile-tab' tabindex='0')
+                        h5.color-t.fw-bold.mb-2.mt-4  Manage Address
+                        .text-center.mt-5.mb-5
+                            p.text-secondary.justify-content-center
+                                | You don&apos;t have add any address, So Please add a address
+                            a.buy-now.text-center.m-auto.cursor-pointer(data-bs-toggle='modal' data-bs-target='#staticBackdrop') Add new address
+                        .p-3
+                            each doc,i in docs.address
+                                .form-check
+                                    input.form-check-input(type='radio' value=doc.ecmaeId id=`address-${i}` name='address'  )
+                                    label.form-check-label(for=`address-${i}` )
+                                        .border.p-2.rounded.address-box
+                                            p #{doc.name},#{doc.phone},#{doc.phone1}
+                                            p #{doc.streetAddress}, #{doc.town}, #{doc.state}, #{doc.country} - #{doc.zip}(land Mark - #{doc.landmark}) | 
+                                                a( href="#" data-bs-toggle='modal' data-bs-target=`#aTarget${i}`) Edit Address
+                                                // Add address Modal
+                                                a.ms-2.delete_address(data-address=doc.ecmaeId type="button") | Delete Address
+                                                .modal.fade(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' id=`aTarget${i}`)
+                                                    .modal-dialog.modal-dialog-scrollable
+                                                        .modal-content
+                                                            .modal-header
+                                                                h1#staticBackdropLabel.modal-title.fs-5
+                                                                    | Edit address
+                                                                button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                                            .modal-body
+                                                                form.update_address(data-id=doc.ecmaeId,data-index=i)
+                                                                    label.form-label.fw-bold.mt-3(for='name') Full name (First and Last name)
+                                                                    input.name.form-control.input-shadow(type='text' placeholder='Full name' required='' value=doc.name)
+                                                                    label.form-label.fw-bold.mt-3(for='phone') Mobile number 1
+                                                                    input.phone.form-control.input-shadow(type='text' value=doc.phone placeholder='Mobile number' required='')
+                                                                    label.form-label.fw-bold.mt-3(for='phone1') Mobile number 2
+                                                                    input.phone1.form-control.input-shadow(type='text' value=doc.phone1 placeholder='Mobile number 2' required='')
+                                                                    label.form-label.fw-bold.mt-3(for='country') Country
+                                                                    input.country.form-control.input-shadow(type='text' value=doc.country placeholder='Country' required='')
+                                                                    label.form-label.fw-bold.mt-3(for='streetAddress') Flat, House no., Building, Company, Apartment
+                                                                    input.streetAddress.form-control.input-shadow(type='text' value=doc.streetAddress placeholder='' required='')
+                                                                    label.form-label.fw-bold.mt-3(for='town') Town
+                                                                    input.town.form-control.input-shadow(type='text' value=doc.town placeholder='' required='')
+                                                                    label.form-label.fw-bold.mt-3(for='state') State
+                                                                    input.state.form-control.input-shadow(type='text' placeholder='' required='' value=doc.state)
+                                                                    label.form-label.fw-bold.mt-3(for='zip') Zipcode
+                                                                    input.zip.form-control.input-shadow(type='text' value=doc.zip placeholder='6 digits [0-9]Pin' required='')
+                                                                    label.form-label.fw-bold.mt-3(for='landmark') Landmark
+                                                                    input.landmark.form-control.input-shadow(type='text' placeholder='' required='' value=doc.landmark)
+                                                                    button.btn.buy-now.d-block.w-50.m-auto.mt-3(type='submit')
+                                                                        | Update Address
+
+
+                    #v-pills-disabled.tab-pane.fade(role='tabpanel' aria-labelledby='v-pills-disabled-tab' tabindex='0')
+                        div
+                            -console.log(docs);
+                            h5.color-t.fw-bold.mb-2.mt-4 Manage your orders
+                            each doc in docs.orders
+                                .p-2.border.rounded.mt-2
+                                    .row.m-2
+                                        .col-sm-6
+                                            h6.fw-bold
+                                                | Order Id: #{doc.ecmorId} 
+                                                span.text-success  #{doc.orderDetails.orderStatus}
+                                            p
+                                                | Date: 
+                                                span.text-secondary= new Date(doc.createdAt).toLocaleString()
+                                        .col-sm-6
+                                            .row
+                                                .col-md-6
+                                                    a.wishlist-add.d-block.text-center.me-3.ms-0.cancel_order(type="button" data-id=doc.ecmorId) Cancel Order
+                                                .col-md-6
+                                                    a.buy-now.d-block.text-center(href='#') Track Order
+                                        hr
+                                        .row
+                                            .col-md-4
+                                                p.fw-bold.p-0.m-0 Contact
+                                                p.p-0.m-0 Name : #{doc.productDetails.vendorId.name}
+                                                p.p-0.m-0 Email: #{doc.productDetails.vendorId.email ? doc.productDetails.vendorId.email : "-"}
+                                            .col-md-4
+                                                p.fw-bold.p-0.m-0 Shiping Addresss
+                                                p.p-0.m-0 #{doc.userAddress.streetAddress}, #{doc.userAddress.town}, #{doc.userAddress.state}, #{doc.userAddress.country} - #{doc.userAddress.zip}(land Mark - #{doc.userAddress.landmark})
+                                            .col-md-4
+                                                p.fw-bold.p-0.m-0 Payment
+                                                p.text-success.p-0.m-0 Cash
+                                                p.p-0.m-0 Shipping Fee: $ -
+                                                p.p-0.m-0 Total Paid: $ #{doc.productDetails.discountPrice ? doc.productDetails.discountPrice : doc.productDetails.price}
+                                            hr.mt-2
+                                            .row
+                                                .col-md-5
+                                                    .row
+                                                        .col-5
+                                                            img.w-100.m-0(src=doc.productDetails.bannerImage alt='mouse corsair')
+                                                        .col-7
+                                                            h6.text-dark=doc.productDetails.name
+                                                            h6.fw-bold Rs. #{doc.productDetails.discountPrice ? doc.productDetails.discountPrice : doc.productDetails.price}
+
+                                                            h6.fw-bold 
+                                                .col-md-7
+                                                    p.fw-bold.p-0.m-0 Tracking
+                                                    .row.mt-3
+                                                        .row.justify-content-between
+                                                            .order-tracking.completed
+                                                                span.is-complete
+                                                                p
+                                                                    | Ordered
+                                                                    br
+                                                                    span=new Date(doc.createdAt).toLocaleString()
+                                                            .order-tracking
+                                                                span.is-complete
+                                                                p
+                                                                    | Shipped
+                                                                    //- br
+                                                                    //- span Tue, June 25
+                                                            .order-tracking
+                                                                span.is-complete
+                                                                p
+                                                                    | Delivered

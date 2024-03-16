@@ -1,0 +1,63 @@
+nav.navbar.navbar-expand-lg.bg-body-tertiary.bg-white.border-bottom
+  .container-xl
+    a.navbar-brand.fw-bold.fs-3.main-color(href='/')
+      | Logo
+      span.fw-normal.fs-6.text-dark .com
+    button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    #navbarSupportedContent.collapse.navbar-collapse
+      ul.navbar-nav.me-auto.mb-2.mb-lg-0.mobile-nav
+        li.nav-item
+          a.nav-link.active.fs-5(aria-current='page' href='/') Home
+        li.nav-item
+          a.nav-link.fs-5(href='/shop') Shop
+        li.nav-item
+          a.nav-link.fs-5(href='/cart') Cart
+        li.nav-item
+          a.nav-link.fs-5(href='/wishlist') Wishlist
+          
+      form.d-flex.ms-auto(role='search')
+        input.form-control.me-2#search_m(type='search' placeholder='Search' aria-label='Search')
+        button.btn.btn-outline-success.search_prdocuts_m(type='button')
+          | Search
+      .d-flex.mt-3.ms-3
+        a.d-flex(href='/cart')
+          i.bi.bi-cart.ms-2.text-dark
+          .position-relative
+            p.text-white.bg-main.rounded-circle.ps-1.pe-1.position-absolute.start-0.top-0.smalltext
+              | #{cart}
+            p.ms-2.text-dark Cart
+        p.ms-2 /
+        if user
+          a.ms-2.text-dark(href='/account') My Account
+          p.ms-2 /
+          a.ms-2.text-dark(href='/logout') Logout
+        else
+          a.ms-2.text-dark(href='/login') Login
+
+nav.navbar.navbar-expand-lg.bg-body-tertiary.sticky-top.bg-white.shadow.web-nav
+  .container-xl
+    button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    #navbarSupportedContent.collapse.navbar-collapse
+      ul.navbar-nav.mb-2.m-auto.nav-fill.w-100
+        li.nav-item
+          a.nav-link.active.fs-5(aria-current='page' href='/') Home
+        li.nav-item
+          a.nav-link.fs-5(href='/shop') Shop
+        li.nav-item
+          a.nav-link.fs-5(href='/cart') Cart
+        li.nav-item
+          a.nav-link.fs-5(href='/wishlist') Wishlist
+        //- li.nav-item
+          a.nav-link.fs-5.bg-main.text-white.rounded-pill.btn-hover(href='#') Link
+      #search_products 
+        script.
+          document.querySelector('.search_prdocuts_m').addEventListener('click',e=>{
+            e.preventDefault();
+            let updatedUrl = window.location.pathname === "/shop" ? new URL(window.location.href) : new URL(`${window.location.origin}/shop`)
+            const value = document.getElementById('search_m').value;
+            updatedUrl.searchParams.set('search', value)
+            return location.assign(updatedUrl)
+          })
+          document.getElementById('search_products').remove()

@@ -1,0 +1,215 @@
+extends layout/base
+
+block block 
+    // Breadcrumb Section
+    .breadcrumb-style.pb-2
+        nav.container-xl.mt-1(aria-label='breadcrumb')
+            ol.breadcrumb
+                li.breadcrumb-item
+                    a.text-secondary.smal-text(href='/') Home
+                li.breadcrumb-item
+                    a.text-secondary.smal-text(href='/shop') Shop
+                li.breadcrumb-item.active(aria-current='page') 
+                    a.text-dark.smal-text Details
+    // Product Section
+    .bg-white.pb-4
+        .container-xxl
+            .row.m-0#product_id(data-id=doc.ecmpeId)
+                .col-sm-6.m-0.text-center.mt-3
+                    img.main-product-img.m-0(src=doc.bannerImage alt='mouse corsair')
+                    .d-flex.mt-4.justify-content-center#gal_image
+                        each docs in doc.imageGallery
+                            img.m-0.small-product-img(src=docs alt='mouse corsair')
+                .col-sm-6.m-0
+                    h4.mt-4#product_type(data-product=doc.productType)= doc.name
+                    .d-flex.justify-content-start.mt-0
+                        each docv in [1,2,3,4,5]
+                            i.bi.color-y(class=docv <= doc.ratingsAverage ? "bi-star-fill" : "bi-star")
+
+                        p.text-primary.ms-2 #{doc.ratingsAverage}
+                        p.text-success.ms-4.fw-bold= doc.active ? "In Stock" : "Out of Stock"
+                    hr.m-0.p-0
+                    h3.fw-bold#price_details
+                        if doc.discountPrice
+                            span Rs. #{doc.discountPrice}
+                            span.text-decoration-line-through.text-secondary.fw-normal.fs-6 Rs.#{doc.price}
+
+                        else 
+                            span Rs. #{doc.price}
+                    if doc.discountPrice
+                        h3.t-pink (#{Math.floor(((doc.price-doc.discountPrice)/doc.price)*100)}% OFF)
+                    p.text-secondary.mt-2.smal-text.p-0.m-0  Inclusive of all taxes
+                    p.text-dark.mt-2.p-0.m-0  EMI starts at ₹111. No Cost EMI available
+
+                    hr
+                    if doc.productType === "colorOnly" || doc.productType === "colorWithSize"
+                        div
+                            p.m-0.p-0 Color
+                            .d-flex.p-1
+                                each ban in doc.productDetails
+                                    img.selection_image.border.p-2.ms-2.cursor-pointer(src=ban.bannerImage,data-color=ban.ecmpsId)
+                    .row
+                        if doc.productType === "sizeOnly" || doc.productType === "colorWithSize"
+                            .col-4
+                                p.m-0.p-0 Size
+                                select.form-select#size_selection(aria-label='Default select example')
+                                    each val in doc.productDetails[0].subDetails
+                                        option(value=val.ecmpssId)= val.size
+                                -const orginVal = JSON.stringify(doc.productDetails[0].subDetails)
+                                if doc.productType === "sizeOnly" 
+                                    #rm_content
+                                        script.
+                                            let docVals ="#{orginVal}".replace(/&quot;/g, '"')
+                                            docVals = JSON.parse(docVals);
+
+                                            const size_selection = document.getElementById('size_selection');
+                                            size_selection.addEventListener('change',e=>{
+                                                e.preventDefault();
+                                                docVals.map(el=>{
+                                                    if(el.ecmpssId === e.target.value){
+                                                        const pri_html = el.discountPrice
+                                                            ? `
+                                                            <span>Rs. ${el.discountPrice}</span>
+                                                            <span class="text-decoration-line-through text-secondary fw-normal fs-6">Rs.${
+                                                                el.price
+                                                            }</span>
+                                                            `
+                                                                : ` <span>Rs. ${el.price}</span>`;
+                                                            const price_details =                        document.getElementById('price_details');
+                                                            price_details.replaceChildren();
+                                                            price_details.insertAdjacentHTML(
+                                                                'beforeend',
+                                                                pri_html
+                                                            );
+                                                    }
+                                                })
+                                            })
+                                            document.getElementById('rm_content').remove()
+
+                        .col-4
+                            p.m-0.p-0 Quantity
+                            .d-flex
+                                p.m-0.input-size.p-1.ps-3.pe-3.border.cursor-pointer.sub_quantity
+                                    | -
+                                p.m-0.input-count.p-1.ps-4.pe-4.border.count_quantity 1
+                                p.m-0.input-size.p-1.ps-3.pe-3.border.cursor-pointer.add_quantity
+                                    | +
+                        .d-flex.button-card
+                            a.buy-now.buy_order(href='#') Buy Now
+                            a.add-cart.add_to_cart(href='#' data-id=doc.ecmpeId)
+                                i.bi.bi-bag
+                                |  Add to Cart
+                            a.wishlist-add.add_to_wishlist(href='#' data-id=doc.ecmpeId)
+                                i.bi.bi-heart
+                                |  Save to Wishlist
+
+                    p.fw-bold Features
+                    each fea in doc.features
+                        .row
+                            .col-3
+                                p.fw-bold= fea.title
+                            .col-4
+                                p= fea.description
+                    hr
+                    p.fw-bold About this item
+                    p.text-secondary.mt-4= doc.description
+
+    hr
+    section.container.mt-5
+        .p-3.bg-white
+            ul#pills-tab.nav.nav-pills.nav-fill.mb-3(role='tablist')
+                li.nav-item(role='presentation')
+                    button#pills-home-tab.nav-link.active(data-bs-toggle='pill' data-bs-target='#pills-home' type='button' role='tab' aria-controls='pills-home' aria-selected='true')
+                        | DESCRIPTION
+                li.nav-item(role='presentation')
+                    button#pills-profile-tab.nav-link(data-bs-toggle='pill' data-bs-target='#pills-profile' type='button' role='tab' aria-controls='pills-profile' aria-selected='false')
+                        | PRODUCT DETAILS
+                li.nav-item(role='presentation')
+                    button#pills-contact-tab.nav-link(data-bs-toggle='pill' data-bs-target='#pills-contact' type='button' role='tab' aria-controls='pills-contact' aria-selected='false')
+                        | REVIEWS
+            #pills-tabContent.tab-content
+                #pills-home.tab-pane.fade.show.active.p-3(role='tabpanel' aria-labelledby='pills-home-tab' tabindex='0')
+                    p.fw-bold.text-secondary Description
+                    p.text-secondary= doc.description
+                #pills-profile.tab-pane.fade.p-3(role='tabpanel' aria-labelledby='pills-profile-tab' tabindex='0')
+                    p.fw-bold.text-secondary Shipping Details
+                    p.text-secondary
+                        | Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eveniet
+                        | pariatur quaerat at molestias accusamus cum libero est. Adipisci
+                        | possimus doloremque enim facilis non, natus ad quisquam ea ab
+                        | pariatur atque, beatae illum saepe modi accusamus sequi culpa et
+                        | deserunt optio quam exercitationem. Saepe nihil obcaecati amet
+                        | autem eum soluta quo!
+                    hr
+                    p.fw-bold.text-secondary Features
+                    each fea in doc.features
+                        .row
+                            .col-3
+                                p.fw-bold= fea.title
+                            .col-4
+                                p= fea.description
+                    hr
+                    p.fw-bold.text-secondary Product Specification
+                    each spc in doc.specification
+                        .row
+                            .col-3
+                                p.fw-bold.text-secondary= spc.title
+                            .col-4
+                                p.text-secondary=spc.description
+                #pills-contact.tab-pane.fade.p-3(role='tabpanel' aria-labelledby='pills-contact-tab' tabindex='0')
+                    p.fw-bold.text-secondary Top Reviews
+                    each docs in doc.reviews
+                        .review-card
+                            .d-flex.m-0
+                                i.bi.bi-person-circle.text-secondary.fs-4
+                                p.text-secondary.m-0.mt-2.ms-3= docs.userId.name
+                            .d-flex.m-0
+                                each docv in [1,2,3,4,5]
+                                    i.bi.main-light(class=docv <= docs.rating ? "bi-star-fill" : "bi-star")
+                                //- p.fw-bold.m-0.ms-3 Title of the Review
+                            p.text-secondary.m-0
+                                | Reviewed At : #{new Date(doc.createdAt).toLocaleString()}
+                            p.Verified-Purchase.m-0 Verified Purchase
+                            p.text-secondary.m-0= docs.review
+
+    .bg-white.container
+        .container-xxl.pt-3.pb-3
+            h4.fw-bold Recommended Products
+            .mt-4
+                .row.row-cols-2.row-cols-md-4.g-4.mt-4
+                    each doc in recommendedProduct
+                        .col
+                            .card.h-100.border-0.bg-light
+                                .d-flex.justify-content-between.p-2.border-bottom
+                                    i.bi.bi-tree.fs-5
+                                    h5.text-dark.one-line= doc.name
+                                    i.bi.bi-shop.fs-5
+                                a.ps-5.pe-5.mt-2(href=`/shop/product/${doc.slug}`)
+                                    h5.text-dark.one-line.text-center= doc.category
+                                    img.card-img-top(src=doc.bannerImage alt='...')
+                                    if doc.discountPrice
+                                        h5.p-0.m-0.text-center.mt-2.text-dark.pe-2
+                                            | Rs.#{doc.discountPrice}
+                                            span.text-secondary.fw-normal.text-decoration-line-through.product-des.pe-2.ps-2 Rs.#{doc.price}
+                                            span.fw-normal.main-light.product-des.pe-2
+                                                | (#{Math.floor(((doc.price-doc.discountPrice)/doc.price)*100)}% OFF)
+                                    else
+                                        p.p-0.m-0.fw-bold.text-center.mt-2.pe-2
+                                            | Rs.#{doc.price}
+                                //- .p-2
+                                    select.form-select.border-dark(aria-label='Default select example')
+                                        option(selected='') Open this select menu
+                                        option(value='1') One
+                                        option(value='2') Two
+                                        option(value='3') Three
+                                .row
+                                    .col-sm-6
+                                        .d-flex.justify-content-center
+                                            p.m-0.cursor-pointer.border.border-2.border-dark.p-1.ps-2.me-1.pe-2.text-center.rounded.sub_quantity
+                                                | -
+                                            p.m-0.card-text.border.border-2.border-dark.p-1.text-center.rounded.ps-3.pe-3.count_quantity
+                                                | 1
+                                            p.m-0.cursor-pointer.border.p-0.border-2.border-dark.p-1.ps-2.ms-1.pe-2.text-center.rounded.add_quantity
+                                                | +
+                                    .col-sm-6.d-flex.justify-content-center
+                                        a.cursor-pointer.btn-main.rounded.fw-bold.mt-1.add_to_cart(data-id=doc.ecmpeId) Add to cart

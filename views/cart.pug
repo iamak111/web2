@@ -1,0 +1,176 @@
+extends layout/base
+
+block block
+    // Cart Product Price Section
+    .container-xxl
+        .row
+            // Cart Product Section
+            .col-md-9.p-3
+                .p-2.bg-white
+                    h3.text-dark Shopping Cart
+                    hr
+                    input#prival(type="hidden" value=docs.price)
+                    input#disprival(type="hidden" value=docs.discountPrice)
+                    input#finalprival(type="hidden" value=docs.finalPrice)
+                    each doc,i in docs.products
+                        .row.mt-2.p-2.m-0
+                            .col-sm-3
+                                img.similer-product-img(src=doc.bannerImage alt='mouse corsair')
+                            .col-sm-8
+                                p.p-0.m-0.text-dark.fs-5=doc.name
+                                if doc.discountPrice
+                                    span.h5.fw-bold.m-0.p-0.mt-2(id=`discountPriceT${i}`) $#{doc.discountPrice * doc.quantity}
+                                    span.ms-2.text-decoration-line-through.text-secondary.fw-normal.fs-6(id=`priceT${i}`) $#{doc.price * doc.quantity}
+                                else
+                                    h5.fw-bold.m-0.p-0.mt-2(id=`priceT${i}`) $#{doc.price * doc.quantity}
+                                p.p-0.m-0.text-success.smal-text In Stock
+                                p.p-0.m-0.smal-text.text-secondary Eligible for FREE Shipping
+                                if doc.type === "colorOnly" || doc.type === "colorWithSize"
+                                    p.p-0.m-0 
+                                        span.fw-bold Color : 
+                                        span.color-main= doc.color
+                                if doc.type === "sizeOnly" || doc.type === "colorWithSize"
+                                    p.p-0.m-0 
+                                        span.fw-bold Size : 
+                                        span= doc.size
+                                .d-flex
+                                    p.m-0.input-size.p-1.ps-3.pe-3.border.cursor-pointer(id=`sub_quantity${i}` data-index=i)
+                                        | -
+                                    p.m-0.input-count.p-1.ps-4.pe-4.border.count_quantity(id=`count_quantity${i}` data-id=doc.id)= doc.quantity
+                                    p.m-0.input-size.p-1.ps-3.pe-3.border.cursor-pointer(id=`add_quantity${i}` data-index=i)
+                                        | +
+                                #rm_cart_script
+                                    script.
+                                        document.getElementById(`sub_quantity#{i}`).addEventListener('click',e=>{
+                                            let price = "#{doc.price}";
+                                            let discountPrice = "#{doc.discountPrice}";
+                                            price = price * 1;
+                                            discountPrice = discountPrice * 1;
+                                            e.preventDefault();
+                                            const val = document.getElementById(`count_quantity#{i}`);
+                                            if (val.innerText * 1 === 1) {
+                                                return false;
+                                            }
+                                            if (val) {
+                                                val.innerText = val.innerText * 1 - 1;
+                                                const priceT = document.getElementById(`priceT#{i}`);
+                                                const discountPriceT = document.getElementById(`discountPriceT#{i}`);
+                                                const prival = document.getElementById("prival");
+                                                const disprival = document.getElementById("disprival");
+                                                const finalprival = document.getElementById("finalprival");
+
+                                                const finalPrice = document.getElementById("finalPrice");
+
+                                                if(discountPrice && discountPriceT){
+                                                    discountPriceT.innerText = "$"+discountPrice * val.innerText;
+                                                    priceT.innerText = "$"+price * val.innerText;
+
+                                                    prival.value = prival.value*1 - price;
+                                                    disprival.value = disprival.value*1 - discountPrice;
+                                                    finalprival.value = finalprival.value*1 - discountPrice;
+
+                                                    finalPrice.innerText = "$"+finalprival.value;
+                                                }else                                                    {
+                                                    priceT.innerText = "$"+price * val.innerText;
+                                                    prival.value = prival.value - price;
+                                                    finalprival.value = finalprival.value - price;
+
+                                                    finalPrice.innerText = "$"+finalprival.value;
+                                                    }
+                                            }
+
+                                        });
+                                        document.getElementById(`add_quantity#{i}`).addEventListener('click',e=>{
+                                            e.preventDefault();
+                                            let price = "#{doc.price}";
+                                            let discountPrice = "#{doc.discountPrice}";
+                                            price = price * 1;
+                                            discountPrice = discountPrice * 1;
+                                            const val = document.getElementById(`count_quantity#{i}`);
+                                            if (val.innerText * 1 === 10) {
+                                                return false;
+                                            }
+                                                if (val) {
+                                                val.innerText = val.innerText * 1 + 1;
+                                                const priceT = document.getElementById(`priceT#{i}`);
+                                                const discountPriceT = document.getElementById(`discountPriceT#{i}`);
+                                                const prival = document.getElementById("prival");
+                                                const disprival = document.getElementById("disprival");
+                                                const finalprival = document.getElementById("finalprival");
+
+                                                const finalPrice = document.getElementById("finalPrice");
+
+                                                if(discountPrice && discountPriceT){
+                                                    discountPriceT.innerText = "$"+discountPrice * val.innerText;
+                                                    priceT.innerText = "$"+price * val.innerText;
+
+                                                    prival.value = prival.value*1 + price;
+                                                    disprival.value = disprival.value*1 + discountPrice;
+                                                    finalprival.value = finalprival.value*1 + discountPrice;
+
+                                                    finalPrice.innerText = "$"+finalprival.value;
+                                                }else                                                    {
+                                                    priceT.innerText = "$"+price * val.innerText;
+                                                    prival.value = prival.value*1 + price;
+                                                    finalprival.value = finalprival.value*1 + price;
+
+                                                    finalPrice.innerText = "$"+finalprival.value;
+                                                    }
+                                            }
+                                        });
+                                        document.getElementById('rm_cart_script').remove();
+                            .col-sm-1
+                                a.float-end.d-block.text-center.remove_cart.fs-3.text-secondary(type="button" data-id=doc.id) 
+                                    i.bi.bi-x
+
+            // Price Section
+            .col-md-3.p-3
+                .p-3.bg-white
+                    .bi.bi-check-circle-fill.text-success.smal-text.mt-2.mb-4  Your order is eligible for FREE Delivery.
+                    h5.text-dark.text-start
+                        | Final price : 
+                        span.fw-bold#finalPrice $#{docs.finalPrice}
+                    a.buy-now.d-block.text-center#cart_to_checkout(type="button") Move to Checkout
+                    a.wishlist-add.d-block.text-center.ms-0(href='/shop') Back to shop
+
+    .bg-white.container
+        .container-xxl.pt-3.pb-3
+            h4.fw-bold Recommended Products
+            .mt-4
+                .row.row-cols-2.row-cols-md-4.g-4.mt-4
+                    each doc in recommendedProduct
+                        .col
+                            .card.h-100.border-0.bg-light
+                                .d-flex.justify-content-between.p-2.border-bottom
+                                    i.bi.bi-tree.fs-5
+                                    h5.text-dark.one-line= doc.name
+                                    i.bi.bi-shop.fs-5
+                                a.ps-5.pe-5.mt-2(href=`/shop/product/${doc.slug}`)
+                                    h5.text-dark.one-line.text-center= doc.category
+                                    img.card-img-top(src=doc.bannerImage alt='...')
+                                    if doc.discountPrice
+                                        h5.p-0.m-0.text-center.mt-2.text-dark.pe-2
+                                            | Rs.#{doc.discountPrice}
+                                            span.text-secondary.fw-normal.text-decoration-line-through.product-des.pe-2.ps-2 Rs.#{doc.price}
+                                            span.fw-normal.main-light.product-des.pe-2
+                                                | (#{Math.floor(((doc.price-doc.discountPrice)/doc.price)*100)}% OFF)
+                                    else
+                                        p.p-0.m-0.fw-bold.text-center.mt-2.pe-2
+                                            | Rs.#{doc.price}
+                                //- .p-2
+                                    select.form-select.border-dark(aria-label='Default select example')
+                                        option(selected='') Open this select menu
+                                        option(value='1') One
+                                        option(value='2') Two
+                                        option(value='3') Three
+                                .row
+                                    .col-sm-6
+                                        .d-flex.justify-content-center
+                                            p.m-0.cursor-pointer.border.border-2.border-dark.p-1.ps-2.me-1.pe-2.text-center.rounded.sub_quantity
+                                                | -
+                                            p.m-0.card-text.border.border-2.border-dark.p-1.text-center.rounded.ps-3.pe-3.count_quantity
+                                                | 1
+                                            p.m-0.cursor-pointer.border.p-0.border-2.border-dark.p-1.ps-2.ms-1.pe-2.text-center.rounded.add_quantity
+                                                | +
+                                    .col-sm-6.d-flex.justify-content-center
+                                        a.cursor-pointer.btn-main.rounded.fw-bold.mt-1.add_to_cart(data-id=doc.ecmpeId) Add to cart

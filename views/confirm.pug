@@ -1,0 +1,67 @@
+extends layout/base
+
+block block     
+    // Verfication and Price Section
+    .bg-white
+        .container-xl
+            .row
+                // Product Verfifcation Section
+                .col-md-8.p-3
+                    .p-3.bg-white
+                        h5.color-t.fw-bold.mb-3.mt-2 
+                            | 3. Review items and delivery
+                        each doc in docs.products
+                            .border.rounded.p-2.mt-2
+                                h6.fw-bold
+                                    | Delivery date: 
+                                    span.text-success 16 Jun 2023
+                                .row.p-2
+                                    .col-3
+                                        img.confirm-product-img.m-auto(src=doc.bannerImage alt='mouse corsair' style="height:74px;")
+                                    .col-9
+                                        p.p-0.m-0.fw-bold.mt-1=doc.name
+                                        p.p-0.m-0
+                                            if doc.discountPrice
+                                                span $#{doc.discountPrice}
+                                                span.text-danger.text-decoration-line-through.fw-bold
+                                                    | $#{doc.price}
+                                            else
+                                                span $#{doc.price}
+                                        if doc.type === "colorOnly" || doc.type === "colorWithSize"
+                                            p.p-0.m-0.fw-bold
+                                                | Color :
+                                                span.fw-normal.ms-2.text-secondary= doc.color
+                                        if doc.type === "sizeOnly" || doc.type === "colorWithSize"
+                                            p.p-0.m-0.fw-bold
+                                                | Size :
+                                                span.fw-normal.ms-2.text-secondary= doc.size
+
+
+                                        p.p-0.m-0.fw-bold
+                                            | Quantity :
+                                            span.fw-normal.ms-2.text-secondary= doc.quantity
+
+                // Price Section
+                .col-md-4.p-3
+                    .p-3.bg-white.border.rounded.mt-5
+                        h6.text-dark.fw-bold.mb-2.mt-2 Order Summary
+                        .row
+                            .col-6
+                                p.text-secondary Total price:
+                            .col-6
+                                p.text-secondary.float-end $#{docs.price}
+                        .row
+                            .col-6
+                                p.text-secondary Discount:
+                            .col-6
+                                p.text-success.float-end $#{docs.discountPrice}
+                        hr
+                        .row
+                            .col-6
+                                p.color-t.fw-bold Final price:
+                            .col-6
+                                p.color-t.fw-bold.float-end $#{docs.finalPrice}
+                        hr
+                        a.buy-now.d-block.text-center#place_order(type="button" data-id=address) Place your order
+            p.mt-3.pb-3.smal-text When your order is placed, we'll send you an e-mail message acknowledging receipt of your order. If you choose to pay using an electronic payment method (credit card, debit card or net banking), you will be directed to your bank's website to complete your payment. Your contract to purchase an item will not be complete until we receive your electronic payment and dispatch your item. If you choose to pay using Pay on Delivery (POD), you can pay using cash/card/net banking when you receive your item.
+

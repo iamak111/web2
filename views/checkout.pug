@@ -1,0 +1,143 @@
+extends layout/base
+
+block block
+    // Add address Modal
+    #staticBackdrop.modal.fade(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true')
+        .modal-dialog.modal-dialog-scrollable
+            .modal-content
+                .modal-header
+                    h1#staticBackdropLabel.modal-title.fs-5
+                        | Add a new address
+                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                .modal-body
+                    form#add_new_address
+                        label.form-label.fw-bold.mt-3(for='name') Full name (First and Last name)
+                        input#name.form-control.input-shadow(type='text' placeholder='Full name' required='')
+                        label.form-label.fw-bold.mt-3(for='phone') Mobile number 1
+                        input#phone.form-control.input-shadow(type='text' placeholder='Mobile number' required='')
+                        label.form-label.fw-bold.mt-3(for='phone1') Mobile number 2
+                        input#phone1.form-control.input-shadow(type='text' placeholder='Mobile number 2' required='')
+                        label.form-label.fw-bold.mt-3(for='country') Country
+                        input#country.form-control.input-shadow(type='text' placeholder='Country' required='')
+                        label.form-label.fw-bold.mt-3(for='streetAddress') Flat, House no., Building, Company, Apartment
+                        input#streetAddress.form-control.input-shadow(type='text' placeholder='' required='')
+                        label.form-label.fw-bold.mt-3(for='town') Town
+                        input#town.form-control.input-shadow(type='text' placeholder='' required='')
+                        label.form-label.fw-bold.mt-3(for='state') State
+                        input#state.form-control.input-shadow(type='text' placeholder='' required='')
+                        label.form-label.fw-bold.mt-3(for='zip') Zipcode
+                        input#zip.form-control.input-shadow(type='text' placeholder='6 digits [0-9]Pin' required='')
+                        label.form-label.fw-bold.mt-3(for='landmark') Landmark
+                        input#landmark.form-control.input-shadow(type='text' placeholder='' required='')
+                        button.btn.buy-now.d-block.w-50.m-auto.mt-3(type='submit')
+                            | Add Address
+   
+    // Address and Payment Select Section
+    .bg-white
+        .container-xl
+            .row
+                // Address Section Section
+                .col-md-8.p-3
+                    .p-2.bg-white
+                        h5.color-t.fw-bold.mb-2 1. Select a delivery address
+                        .border.rounded
+                            h5.text-dark.fw-bold.mb-2.ms-3.mt-3 Your addresses
+                            hr.m-0.p-0
+                            .text-center.mt-5.mb-5
+                                p.text-secondary.justify-content-center
+                                    | You don&apos;t have add any address, So Please add a address
+                                a.buy-now.text-center.m-auto.cursor-pointer(data-bs-toggle='modal' data-bs-target='#staticBackdrop') Add new address
+                            .p-3
+                                each doc,i in docs.addresses
+                                    .form-check
+                                        input.form-check-input(type='radio' value=doc.ecmaeId id=`address-${i}` name='address'  )
+                                        label.form-check-label(for=`address-${i}` )
+                                            .border.p-2.rounded.address-box
+                                                p #{doc.name},#{doc.phone},#{doc.phone1}
+                                                p #{doc.streetAddress}, #{doc.town}, #{doc.state}, #{doc.country} - #{doc.zip}(land Mark - #{doc.landmark}) | 
+                                                    a( href="#" data-bs-toggle='modal' data-bs-target=`#aTarget${i}`) Edit Address
+                                                    // Add address Modal
+                                                    a.ms-2.delete_address(data-address=doc.ecmaeId type="button") | Delete Address
+                                                    .modal.fade(data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1'   id=`aTarget${i}`)
+                                                        .modal-dialog.modal-dialog-scrollable
+                                                            .modal-content
+                                                                .modal-header
+                                                                    h1#staticBackdropLabel.modal-title.fs-5
+                                                                        | Edit address
+                                                                    button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                                                                .modal-body
+                                                                    form.update_address(data-id=doc.ecmaeId,data-index=i)
+                                                                        label.form-label.fw-bold.mt-3(for='name') Full name (First and Last name)
+                                                                        input.name.form-control.input-shadow(type='text' placeholder='Full name' required='' value=doc.name)
+                                                                        label.form-label.fw-bold.mt-3(for='phone') Mobile number 1
+                                                                        input.phone.form-control.input-shadow(type='text' value=doc.phone placeholder='Mobile number' required='')
+                                                                        label.form-label.fw-bold.mt-3(for='phone1') Mobile number 2
+                                                                        input.phone1.form-control.input-shadow(type='text' value=doc.phone1 placeholder='Mobile number 2' required='')
+                                                                        label.form-label.fw-bold.mt-3(for='country') Country
+                                                                        input.country.form-control.input-shadow(type='text' value=doc.country placeholder='Country' required='')
+                                                                        label.form-label.fw-bold.mt-3(for='streetAddress') Flat, House no., Building, Company, Apartment
+                                                                        input.streetAddress.form-control.input-shadow(type='text' value=doc.streetAddress placeholder='' required='')
+                                                                        label.form-label.fw-bold.mt-3(for='town') Town
+                                                                        input.town.form-control.input-shadow(type='text' value=doc.town placeholder='' required='')
+                                                                        label.form-label.fw-bold.mt-3(for='state') State
+                                                                        input.state.form-control.input-shadow(type='text' placeholder='' required='' value=doc.state)
+                                                                        label.form-label.fw-bold.mt-3(for='zip') Zipcode
+                                                                        input.zip.form-control.input-shadow(type='text' value=doc.zip placeholder='6 digits [0-9]Pin' required='')
+                                                                        label.form-label.fw-bold.mt-3(for='landmark') Landmark
+                                                                        input.landmark.form-control.input-shadow(type='text' placeholder='' required='' value=doc.landmark)
+                                                                        button.btn.buy-now.d-block.w-50.m-auto.mt-3(type='submit')
+                                                                            | Update Address
+                                            
+
+                        // Select Payment Option
+                        h5.color-t.fw-bold.mb-2.mt-4 2. Select Payment Method
+                        .border.rounded.p-3
+                            form
+                                .form-check
+                                    input#flexRadioDefault1.form-check-input(type='radio' name='flexRadioDefault')
+                                    label.form-check-label.w-100(for='flexRadioDefault1')
+                                        .border.p-2.rounded.address-box
+                                            p.fw-bold Pay with Debit/Credit/ATM Cards
+                                .form-check
+                                    input#flexRadioDefault2.form-check-input(type='radio' name='flexRadioDefault')
+                                    label.form-check-label.w-100(for='flexRadioDefault2')
+                                        .border.p-2.rounded.address-box
+                                            p.fw-bold Net Banking
+                                .form-check
+                                    input#flexRadioDefault3.form-check-input(type='radio' name='flexRadioDefault')
+                                    label.form-check-label.w-100(for='flexRadioDefault3')
+                                        .border.p-2.rounded.address-box
+                                            p.fw-bold Other UPI Apps
+                                .form-check
+                                    input#flexRadioDefault4.form-check-input(type='radio' name='flexRadioDefault')
+                                    label.form-check-label.w-100(for='flexRadioDefault4')
+                                        .border.p-2.rounded.address-box
+                                            p.fw-bold Cash on Delivery/Pay on Delivery
+            
+                // Price Section
+                .col-md-4.p-3
+                    .p-3.bg-white.border.rounded.mt-4
+                        h6.text-secondary.fw-bold.mb-2 Order Summary
+                        .row
+                            .col-6
+                                p.text-secondary Total price:
+                            .col-6
+                                p.text-secondary.float-end $#{docs.price}
+                        .row
+                            .col-6
+                                p.text-secondary Discount:
+                            .col-6
+                                p.text-success.float-end $#{docs.discountPrice}
+                        .row
+                            .col-6
+                                p.text-secondary TAX:
+                            .col-6
+                                p.text-secondary.float-end $20
+                        hr
+                        .row
+                            .col-6
+                                h5.color-t.fw-bold Order Total:
+                            .col-6
+                                h5.color-t.fw-bold.float-end $#{docs.finalPrice}
+                        a.buy-now.d-block.text-center#confirm_order(href='#') Confirm Order
+

@@ -1,0 +1,31 @@
+extends layout/base
+
+block block 
+    // Wishlist Product Price Section
+    .bg-white
+        .container-xl
+            .row
+                // Wishlist Product Section
+                .col-md-12.p-3.mt-2
+                    .p-2.bg-white
+                        h6.text-dark.fw-bold.mb-4.text-uppercase My Wishlist
+                        .row.row-cols-2.row-cols-md-3.row-cols-lg-5.g-4
+                            each doc in docs
+                                .col
+                                    .cart-product-card.h-100.border
+
+                                        a(href=`/shop/product/${doc.productId.slug}`)
+                                            img.cart-product-img.m-0(src=doc.productId.bannerImage alt='mouse corsair')
+                                            .p-2.text-center
+                                                h6.m-0.p-0.text-dark= doc.productId.name
+                                                p.p-0.m-0.fw-bold.text-dark
+                                                    if doc.productId.discountPrice
+                                                        | Rs.$#{doc.productId.discountPrice}
+                                                        span.text-secondary.fw-normal.text-decoration-line-through.product-des Rs.#{doc.productId.price}
+                                                        span.fw-normal.main-light.product-des
+                                                            | (#{Math.floor(((doc.productId.price-doc.productId.discountPrice)/doc.productId.price)*100)}% OFF)
+                                                    else 
+                                                        | Rs.$#{doc.productId.price}
+                                            hr.bg-secondary.p-0.m-0
+                                            a.d-block.text-center.ms-0.p-3.remove_wishlist.fw-bold.color-main(type="button" data-id=doc.ecmwlId) REMOVE
+
