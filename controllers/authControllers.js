@@ -1,11 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 const crypto = require('crypto');
-const Razorpay = require('razorpay');
-const stripe = require('stripe')(
-    'sk_test_51KoKsaSBXfZXMoXoNQWEZlPc8k21YUWZg0I36o3Ky6tkglNbM2bV16inpdtZMFbPLcq4AIajh8aMdvK3BpApXxp300Q0PWbbZL'
-);
-const paypal = require('paypal-rest-sdk');
+
 const sendMail = require('../util/email');
 // import user model
 const userModel = require('../models/userModel');
@@ -13,8 +9,9 @@ const userModel = require('../models/userModel');
 // import async
 const catchAsync = require('../util/catchAsync');
 const AppError = require('../util/appError');
-const sendSMS = require('../util/sms');
+// const sendSMS = require('../util/sms');
 const encryptID = require('../util/encryptID');
+const cartModel = require('../models/cartModel');
 
 // create JWT
 const signJWT = (id) =>
@@ -45,78 +42,15 @@ const sendJWT = (user, statusCode, res) => {
     });
 };
 
-const userAccountVerification = async (req, res, next, user) => {
-    try {
-        const conformationToken = await user.userConformationToken();
-        await user.save({ validateBeforeSave: false });
-        const resetUrl = `${req.protocol}://${req.get(
-            'host'
-        )}/api/user/verifyUser/${conformationToken}`;
-        const message = `Forgot user password? Click to reset.\n ${resetUrl}.\n If you know the password just igonore it.`;
-        await sendMail({
-            email: user.email,
-            subject: 'Account verification  token(Valid only 10min)',
-            message
-        });
-    } catch (err) {
-        user.accountVerificationToken = undefined;
-        user.accountVerificationExpires = undefined;
-        await user.save({ validateBeforeSave: false });
-        return next(
-            new AppError(
-                'Something went worng to send your email.Please Try again later',
-                500
-            )
-        );
-    }
-};
-
-// signup user
-exports.signup = catchAsync(async (req, res, next) => {
-    const signupUser = await userModel.create(req.body);
-    await userAccountVerification(req, res, next, signupUser);
-    return res.json({
-        status: 'Success',
-        message: 'The message send successfull'
-    });
-});
-
-// login user
-exports.login = catchAsync(async (req, res, next) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        next(new AppError('Please Enter The Email and Password', 400));
-    }
-
-    const user = await userModel.findOne({ email }).select('+password');
-
-    if (!user || !(await user.checkPassword(password, user.password))) {
-        return next(new AppError('Email or Password in invalid', 401));
-    }
-
-    if (!user.accountVerification) {
-        await userAccountVerification(req, res, next, user);
-        return next(
-            new AppError(
-                'You are bending in account verification.We sended mail to your account.check and verify',
-                401
-            )
-        );
-    }
-
-    sendJWT(user, 200, res);
-});
-
 // product user
 exports.protect = catchAsync(async (req, res, next) => {
     let token;
-    if (req.cookies.jwt) {
-        token = req.cookies.jwt;
-        req.from = 'web';
-    } else if (req.headers.jwt) {
+    if (req.headers.jwt) {
         token = req.headers.jwt;
         req.from = 'mobile';
+    } else if (req.cookies.jwt) {
+        token = req.cookies.jwt;
+        req.from = 'web';
     }
 
     if (!token) {
@@ -153,34 +87,107 @@ exports.protect = catchAsync(async (req, res, next) => {
     next();
 });
 
+exports.protectCart = catchAsync(async (req, res, next) => {
+    let token;
+    if (req.headers.jwt) {
+        token = req.headers.jwt;
+        req.from = 'mobile';
+    } else if (req.cookies.jwt) {
+        token = req.cookies.jwt;
+        req.from = 'web';
+    }
+    if (req.from === 'mobile') {
+        if (!token) {
+            return next(
+                new AppError(
+                    'You are not loggedin. Please login and try to access the page.',
+                    401
+                )
+            );
+        }
+        let decode = '';
+        try {
+            decode = await promisify(jwt.verify)(
+                token,
+                process.env.JSON_SECRET
+            );
+        } catch (err) {
+            return next(
+                new AppError(
+                    'You are not loggedin. Please login and try to access the page.',
+                    401
+                )
+            );
+        }
+
+        const freshUser = await userModel.findById(decode.id);
+        if (!freshUser) {
+            return next(
+                new AppError(
+                    'The user no longer exist. please create a new account',
+                    401
+                )
+            );
+        }
+
+        req.user = freshUser;
+        next();
+    } else {
+        req.from = 'web';
+        const id = await encryptID();
+        if (req.cookies.jwt) {
+            try {
+                const decode = await promisify(jwt.verify)(
+                    req.cookies.jwt,
+                    process.env.JSON_SECRET
+                );
+                const freshUser = await userModel.findById(decode.id);
+                if (!freshUser) {
+                    res.cookie('uId', id);
+                    return next();
+                }
+                req.login = true;
+                req.user = freshUser;
+                res.locals.user = freshUser;
+                return next();
+            } catch (err) {
+                return next();
+            }
+        }
+        if (!req.cookies.uId) res.cookie('uId', id);
+        next();
+    }
+});
+
 exports.verifyVendor = (req, res, next) => {
-    if (!req.user.accountVerification)
+    if (req.user.accountVerification !== 'accepted')
         return next(new AppError('Invalid vendor.', 400));
     return next();
 };
 
 exports.isLoggedin = async (req, res, next) => {
+    req.from = 'web';
+    const id = await encryptID();
     if (req.cookies.jwt) {
         try {
             const decode = await promisify(jwt.verify)(
                 req.cookies.jwt,
                 process.env.JSON_SECRET
             );
-            req.from = 'web';
             const freshUser = await userModel.findById(decode.id);
             if (!freshUser) {
+                res.cookie('uId', id);
                 return next();
             }
-            if (freshUser.checkPassAfterToken(decode.iat)) {
-                return next();
-            }
-
+            req.login = true;
+            req.user = freshUser;
             res.locals.user = freshUser;
             return next();
         } catch (err) {
             return next();
         }
     }
+    if (!req.cookies.uId) res.cookie('uId', id);
     next();
 };
 // restrict user
@@ -225,11 +232,11 @@ const generateOtpForUser = async (req, res, next, user) => {
 };
 // generate otp for user
 exports.userOtpGenerate = catchAsync(async (req, res, next) => {
-    const user = await userModel.findOne({ phone: req.body.phone });
-    if (!req.body.phone || req.body.phone.length !== 10)
-        return next(
-            new AppError('Please enter the valid phone numbers.', 400)
-        );
+    let data = [];
+    if (req.query.role === 'vendor') data = { role: 'vendor' };
+    const user = await userModel.findOne({ phone: req.body.phone, ...data });
+    if (!req.body.phone)
+        return next(new AppError('Please enter the valid phone numbers.', 400));
     let otp;
     if (!user) {
         req.body.ecmuId = await encryptID();
@@ -257,9 +264,57 @@ exports.verifyUserOtp = catchAsync(async (req, res, next) => {
     if (!user) {
         return next(new AppError('Not Valid datas', 400));
     }
-    user.accountVerification = true;
+
     user.phoneVerificationToken = undefined;
     user.phoneVerificationTokenExpires = undefined;
     await user.save({ validateBeforeSave: false });
+    if (req.cookies.uId) {
+        const carts = await cartModel
+            .find({
+                uId: req.cookies.uId,
+                type: 'cart',
+                for: process.env.WEBSITE_CATEGORY
+            })
+            .distinct('productEId');
+        if (carts.length) {
+            const userCart = await cartModel
+                .find({
+                    userId: user._id,
+                    type: 'cart',
+                    for: process.env.WEBSITE_CATEGORY
+                })
+                .distinct('productEId');
+            console.log(carts);
+            console.log(userCart);
+            const filteredCarts = [];
+            const removeCart = [];
+            await Promise.all(
+                carts.map((el) => {
+                    if (!userCart.includes(el)) {
+                        filteredCarts.push(el);
+                    } else {
+                    }
+                })
+            );
+            if (filteredCarts.length) {
+                await Promise.all(
+                    filteredCarts.map(async (el) => {
+                        await cartModel.findOneAndUpdate(
+                            {
+                                uId: req.cookies.uId,
+                                productEId: el
+                            },
+                            {
+                                userId: user._id,
+                                userEId: user.ecmuId,
+                                uId: '-'
+                            }
+                        );
+                    })
+                );
+            }
+            await cartModel.deleteMany({ uId: req.cookies.uId });
+        }
+    }
     return sendJWT(user, 200, res);
 });

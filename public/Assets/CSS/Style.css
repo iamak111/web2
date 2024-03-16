@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 
 :root {
-    --MAIN_COLOR: #4caf50;
+    --MAIN_COLOR: #26a9d1fa;
     --SECOND_COLOR: #fc9a3e;
     --GRAY_COLOR: #747171;
     --WHITE_COLOR: #ffffff;
@@ -9,7 +9,7 @@
     --BLACK_COLOR: #000000;
     --LEIGH_GRAY: #9b9a9a56;
     --LIGHT_BLACK: #292828;
-    --MAIN_LIGHT_COLOR: #5ed862;
+    --MAIN_LIGHT_COLOR: #26a9d1a8;
 }
 
 body {

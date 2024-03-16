@@ -14,9 +14,8 @@ const userModel = require('../models/userModel');
 const orderModel = require('../models/orderModel');
 const ordermodel = require('../models/orderModel');
 const addressModel = require('../models/addressModel');
-
+const { banners1, banners2 } = require('../bannerJSON/bannerjson.json');
 exports.getHome = (req, res) => {
-    // console.log(JSON.stringify(req.body));
     return res.status(200).render('home', {
         docs: req.body,
         title: 'Themobsterhoard - Ecommerce Service'
@@ -47,11 +46,15 @@ exports.myAddress = (req, res) => {
     });
 };
 
+exports.sendBodyDocs = (req, res) =>
+    res.status(200).json({ status: 'Success', docs: req.body });
+
 exports.getCategoires = catchAsync(async (req, res, next) => {
     const category = await categorieModel.find({
         for: process.env.WEBSITE_CATEGORY
     });
     res.locals.category = category;
+
     next();
 });
 exports.logout = catchAsync((req, res, next) => {
@@ -64,10 +67,10 @@ exports.logout = catchAsync((req, res, next) => {
 
 exports.top3SellingCategories = catchAsync(async (req, res, next) => {
     let filterQuery = {};
-
-    filterQuery = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
-
-    const categories = await orderModel.aggregate([
+    if (req.from !== 'mobile') {
+        filterQuery = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
+    }
+    let categories = await orderModel.aggregate([
         {
             $match: filterQuery
         },
@@ -114,6 +117,19 @@ exports.top3SellingCategories = catchAsync(async (req, res, next) => {
             }
         }
     ]);
+    if (!categories.length) {
+        categories = await categorieModel
+            .find({ for: process.env.WEBSITE_CATEGORY })
+            .limit(2);
+    } else if (categories.length === 1) {
+        const x = await categorieModel
+            .findOne({
+                for: process.env.WEBSITE_CATEGORY,
+                slug: { $ne: categories[0].slug }
+            })
+            .limit(1);
+        categories = [...categories, x];
+    }
     req.body.top3Categories = categories;
 
     return next();
@@ -122,11 +138,12 @@ exports.top3SellingCategories = catchAsync(async (req, res, next) => {
 exports.getTopCategories = catchAsync(async (req, res, next) => {
     let filterQuery = [];
     let fors = [];
+    if (req.from !== 'mobile') {
+        filterQuery = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
+        fors = { for: process.env.WEBSITE_CATEGORY };
+    }
 
-    filterQuery = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
-    fors = { for: process.env.WEBSITE_CATEGORY };
-
-    const products = await orderModel.aggregate([
+    let products = await orderModel.aggregate([
         {
             $match: { ...filterQuery }
         },
@@ -142,7 +159,7 @@ exports.getTopCategories = catchAsync(async (req, res, next) => {
             }
         },
         {
-            $limit: 5
+            $limit: 10
         },
         {
             $lookup: {
@@ -168,6 +185,11 @@ exports.getTopCategories = catchAsync(async (req, res, next) => {
             }
         }
     ]);
+
+    if (products.length !== 10) {
+        const y = await productModel.find(fors).limit(10 - products.length);
+        products = [...products, ...y];
+    }
 
     req.body.topSetllingProducts = products;
 
@@ -231,9 +253,10 @@ exports.getTopCategories = catchAsync(async (req, res, next) => {
             $limit: 1
         }
     ]);
+
     const recommendedProduct = await productModel.aggregate([
         { $match: { ...fors } },
-        { $sample: { size: 10 } }
+        { $sample: { size: 8 } }
     ]);
 
     if (topDeals.length !== 8) {
@@ -254,9 +277,12 @@ exports.getTopCategories = catchAsync(async (req, res, next) => {
 
         dealOfTheDay = [...dealOfTheDay, ...b];
     }
+
     req.body.topDeals = topDeals;
     req.body.dealOfTheDay = dealOfTheDay;
     req.body.recommendedProduct = recommendedProduct;
+    req.body.bannerjson1 = banners1;
+    req.body.bannerjson2 = banners2;
     return next();
 });
 
@@ -272,13 +298,19 @@ exports.getAProduct = (req, res, next) =>
         doc: req.body,
         recommendedProduct: req.recom
     });
+
 // get cart price
 exports.getCartPrice = catchAsync(async (req, res, next) => {
-    if (!res.locals?.user) return next();
+    let finalRs = {};
+    if (req.login) {
+        finalRs = { userId: req.user._id, userEId: req.user.ecmuId };
+    } else {
+        finalRs = { uId: req.cookies.uId };
+    }
     const carts = await cartModel.aggregate([
         {
             $match: {
-                userId: res.locals.user._id,
+                ...finalRs,
                 type: 'cart',
                 for: process.env.WEBSITE_CATEGORY
             }
@@ -454,3 +486,5 @@ exports.getCartPrice = catchAsync(async (req, res, next) => {
 
     return next();
 });
+
+exports.getContactus = (req, res) => res.render('contactUs');

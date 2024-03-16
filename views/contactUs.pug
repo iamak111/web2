@@ -1,0 +1,76 @@
+extends layout/base
+
+block block 
+    .input-shadow.rounded.bg-white.w-100.mb-4.width-100 
+        .p-5.d-flex.justify-content-center
+            .w-75.d-flex.justify-content-center
+                .w-75
+                    form#send_email
+                        div.w-75.m-auto.mb-3
+                            h5.fw-bold Contact Form 
+                        div.w-75.m-auto.mb-1
+                            label.fw-bold First Name * :
+                        input#fname.form-control.w-75.m-auto.mb-3.bg-light(type='text' required placeholder='First Name')       
+                        div.w-75.m-auto.mb-1
+                            label.fw-bold Last Name * :
+                        input#flast.form-control.w-75.m-auto.mb-3.bg-light(type='text' required placeholder='Last Name')       
+                        div.w-75.m-auto.mb-1
+                            label.fw-bold Email * :
+                            br
+                            small.text-secondary(style="font-size:13px;") Enter the email associated with your order
+                        input#email.form-control.w-75.m-auto.mb-3.bg-light(type='email' required placeholder='Email')       
+                        div.w-75.m-auto.mb-1
+                            label.fw-bold Phone * :
+                        input#phone.form-control.w-75.m-auto.mb-3.bg-light(type='text' required placeholder='Phone')       
+                        div.w-75.m-auto.mb-1
+                            label.fw-bold Order Number * :
+                            br
+                            small.text-secondary(style="font-size:13px;") If you don't have an order number, type "N/A"
+                        input#order.form-control.w-75.m-auto.mb-3.bg-light(type='text' required placeholder='Order Number')       
+                        div.w-75.m-auto.mb-1
+                            label.fw-bold Category * :
+                            br
+                            small.text-secondary(style="font-size:13px;") Select the category that most applies to your inquiry.
+                        .form-check.w-75.m-auto.mb-1
+                            input#flexRadioDefault1.form-check-input(type='radio' name='flexRadioDefault' value="Damaged/Faulty Product")
+                            label.form-check-label(style="font-size:15px;" for='flexRadioDefault1')
+                                | Damaged/Faulty Product (file upload required)
+                        .form-check.w-75.m-auto.mb-1
+                            input#flexRadioDefault2.form-check-input(type='radio' required name='flexRadioDefault' value="Missing/Incorrect Product" )
+                            label.form-check-label(style="font-size:15px;" for='flexRadioDefault2')
+                                | Missing/Incorrect Product (file upload required)
+                        .form-check.w-75.m-auto.mb-1
+                            input#flexRadioDefault3.form-check-input(type='radio' required name='flexRadioDefault' value="Order Status")
+                            label.form-check-label(style="font-size:15px;" for='flexRadioDefault3')
+                                | Order Status
+                        .form-check.w-75.m-auto.mb-1
+                            input#flexRadioDefault4.form-check-input(type='radio' required name='flexRadioDefault' value="Billing Issue" )
+                            label.form-check-label(style="font-size:15px;" for='flexRadioDefault4')
+                                | Billing Issue
+                        .form-check.w-75.m-auto.mb-1
+                            input#flexRadioDefault5.form-check-input(type='radio' required name='flexRadioDefault' value="Delivery Issue")
+                            label.form-check-label(style="font-size:15px;" for='flexRadioDefault5')
+                                | Delivery Issue
+                        .form-check.w-75.m-auto.mb-1
+                            input#flexRadioDefault6.form-check-input(type='radio' required name='flexRadioDefault' value="Cancel My Order" )
+                            label.form-check-label(style="font-size:15px;" for='flexRadioDefault6')
+                                | Cancel My Order
+                        .form-check.w-75.m-auto.mb-1
+                            input#flexRadioDefault7.form-check-input(type='radio' required name='flexRadioDefault' value="Other")
+                            label.form-check-label(style="font-size:15px;" for='flexRadioDefault7')
+                                | Other
+ 
+
+                        div.w-75.m-auto.mb-1
+                            label.fw-bold File Upload :
+                            br
+                            small.text-secondary(style="font-size:13px;") If you selected Damaged/Faulty Product or Missing/Incorrect Product, be sure to include photos of your packing slip, all products in the order, and the order packaging. Otherwise, include screenshots of any error messages or details that will aid in troubleshooting.
+
+                        input#file.form-control.w-75.m-auto.mb-3.bg-light(type='file' multiple)       
+                        div.w-75.m-auto.mb-1
+                            label.fw-bold Message * :
+                            br
+                            small.text-secondary(style="font-size:13px;") Provide as much detail as possible.
+                        textarea#message.form-control.w-75.m-auto.mb-3.bg-light(type='text' placeholder='Message' required)       
+                        div.w-75.m-auto.mb-3.d-grid    
+                            button.buy-now.mb-3.btn-block(type="submit") Submit

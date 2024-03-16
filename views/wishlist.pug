@@ -27,5 +27,11 @@ block block
                                                     else 
                                                         | Rs.$#{doc.productId.price}
                                             hr.bg-secondary.p-0.m-0
-                                            a.d-block.text-center.ms-0.p-3.remove_wishlist.fw-bold.color-main(type="button" data-id=doc.ecmwlId) REMOVE
-
+                                            -console.log(doc)
+                                            .row.p-2
+                                                .col
+                                                    a(href="#" class="d-block p-2 text-uppercase rounded-1 mt-2 ps-3 pe-3 fs-small text-white btn-main align-items-center w-100 text-center move_cart" data-id=doc.ecmwlId data-product=doc.productEId  )
+                                                        i(class="bi bi-cart fs-5" data-id=doc.ecmwlId data-product=doc.productEId)
+                                                .col
+                                                    a(type="button" class="d-block p-2 text-uppercase rounded-1 mt-2 ps-3 pe-3 fs-small text-white btn-danger btn align-items-center w-100 text-center" data-id=doc.ecmwlId) 
+                                                        <i class="bi bi-x fs-5"></i>

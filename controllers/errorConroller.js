@@ -18,6 +18,7 @@ const handleValidationErrorDB = (err) => {
 const sendErrDev = (err, req, res) => {
     // if (err.message.startsWith('E11000 duplicate key')) err.message
     const text = err.message;
+    console.log(text);
     if (text.startsWith('E11000 duplicate key')) {
         const pattern = /{(.*):/;
         const result = text.match(pattern);

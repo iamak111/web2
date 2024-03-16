@@ -184,3 +184,46 @@ export const getAdditionalDetails = async (id, data) => {
         } else return alert('Somthing went wrong. Please try again.');
     }
 };
+
+export const moveCartToCart = async (id, id2) => {
+    try {
+        await axios({
+            method: 'DELETE',
+            url: `/api/v1/user/wishlist/${id}`
+        }).then(async (res) => {
+            if (res.data.status === 'Success') {
+                await axios({
+                    method: 'POST',
+                    url: `/api/v1/user/cart/${id2}`
+                }).then((res) => {
+                    if (res.data.status === 'Success') {
+                        alert('Product Successfully moved to cart.');
+                        location.reload();
+                    }
+                });
+            }
+        });
+    } catch (err) {
+        if (err?.response?.data?.message) {
+            return alert(err.response.data.message);
+        } else return alert('Somthing went wrong. Please try again.');
+    }
+};
+export const sendEmail = async (data) => {
+    try {
+        await axios({
+            method: 'POST',
+            url: '/api/v1/user/send-mail',
+            data
+        }).then((res) => {
+            if (res.data.status === 'Success') {
+                alert('Your requrest submited successfully.');
+                return location.reload();
+            }
+        });
+    } catch (err) {
+        if (err?.response?.data?.message) {
+            return alert(err.response.data.message);
+        } else return alert('Somthing went wrong. Please try again.');
+    }
+};

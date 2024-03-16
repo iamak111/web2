@@ -23,7 +23,7 @@ block block
                                     span.ms-2.text-decoration-line-through.text-secondary.fw-normal.fs-6(id=`priceT${i}`) $#{doc.price * doc.quantity}
                                 else
                                     h5.fw-bold.m-0.p-0.mt-2(id=`priceT${i}`) $#{doc.price * doc.quantity}
-                                p.p-0.m-0.text-success.smal-text In Stock
+                                p.p-0.m-0.text-success.smal-text
                                 p.p-0.m-0.smal-text.text-secondary Eligible for FREE Shipping
                                 if doc.type === "colorOnly" || doc.type === "colorWithSize"
                                     p.p-0.m-0 
@@ -36,7 +36,7 @@ block block
                                 .d-flex
                                     p.m-0.input-size.p-1.ps-3.pe-3.border.cursor-pointer(id=`sub_quantity${i}` data-index=i)
                                         | -
-                                    p.m-0.input-count.p-1.ps-4.pe-4.border.count_quantity(id=`count_quantity${i}` data-id=doc.id)= doc.quantity
+                                    p.m-0.input-count.p-1.ps-4.pe-4.border.checkout_carts(id=`count_quantity${i}` data-id=doc.id)= doc.quantity
                                     p.m-0.input-size.p-1.ps-3.pe-3.border.cursor-pointer(id=`add_quantity${i}` data-index=i)
                                         | +
                                 #rm_cart_script

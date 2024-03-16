@@ -1,8 +1,5 @@
 /* eslint-disable array-callback-return */
 const mongoose = require('mongoose');
-const stripe = require('stripe')(
-    'sk_test_51KoKsaSBXfZXMoXoNQWEZlPc8k21YUWZg0I36o3Ky6tkglNbM2bV16inpdtZMFbPLcq4AIajh8aMdvK3BpApXxp300Q0PWbbZL'
-);
 const userModel = require('../models/userModel');
 const factoryHandler = require('./factoryHandler');
 const catchAsync = require('../util/catchAsync');
@@ -14,6 +11,7 @@ const ordermodel = require('../models/orderModel');
 const addressModel = require('../models/addressModel');
 const categoryModel = require('../models/categorieModel');
 const encryptID = require('../util/encryptID');
+const sendMail = require('../util/email');
 
 const filerDataFromRequest = (obj, ...allowedFields) => {
     const filterdData = {};
@@ -24,14 +22,40 @@ const filerDataFromRequest = (obj, ...allowedFields) => {
 };
 
 exports.updateUser = catchAsync(async (req, res, next) => {
-    const filterObject = filerDataFromRequest(
-        req.body,
-        'name',
-        'email',
-        'profile'
-    );
+    const filter =
+        req.user.role === 'user'
+            ? ['name', 'email', 'profile']
+            : req.user.role === 'vendor' &&
+              req.user.accountVerification !== 'accepted'
+            ? [
+                  'name',
+                  'email',
+                  'verifyDocuments',
+                  'profile',
+                  'shopPhone',
+                  'shopAddress',
+                  'shopImage',
+                  'city',
+                  'state',
+                  'country',
+                  'zipcode',
+                  'GSTNumber',
+                  'shopName',
+                  'shopEmail'
+              ]
+            : req.user.role === 'vendor' &&
+              req.user.accountVerification === 'accepted'
+            ? ['name', 'profile']
+            : [[]];
+    const filterObject = filerDataFromRequest(req.body, ...filter);
     if (req.file) filterObject.photo = req.file.filename;
     if (!filterObject.email) delete filterObject.email;
+    if (
+        req.user.role === 'vendor' &&
+        req.user.accountVerification !== 'accepted'
+    ) {
+        filterObject.accountVerification = 'requested';
+    }
     const user = await userModel.findByIdAndUpdate(req.user._id, filterObject, {
         new: true,
         runValidators: true
@@ -195,9 +219,9 @@ exports.checkTimeExpires = catchAsync(async (req, res, next) => {
 
 exports.getCheckoutDetails = catchAsync(async (req, res, next) => {
     const filterQuery = {};
-
-    filterQuery.for = process.env.WEBSITE_CATEGORY;
-
+    if (req.from === 'web') {
+        filterQuery.for = process.env.WEBSITE_CATEGORY;
+    }
     const [addresses, productes] = await Promise.all([
         addressModel.find({ userId: req.user._id }),
         cartModel.aggregate([
@@ -306,7 +330,7 @@ exports.getCheckoutDetails = catchAsync(async (req, res, next) => {
                         quantity: el.quantity
                     };
                     price = price + size.price * el.quantity;
-                    console.log(el);
+
                     discountPrice =
                         discountPrice + size.discountPrice * el.quantity;
                     finalPrice =
@@ -364,6 +388,8 @@ exports.getCheckoutDetails = catchAsync(async (req, res, next) => {
         })
     );
 
+    if (!products || !products.length)
+        return next(new AppError(`undefiefd url ${req.originalUrl}`, 404));
     req.body = { addresses, products, price, discountPrice, finalPrice };
 
     return next();
@@ -383,17 +409,22 @@ exports.sendConfirmScreen = (req, res) =>
 
 exports.thankYouGet = (req, res) => res.render('thankyou');
 exports.getAccountRender = (req, res) =>
-    res.render('account', { docs: req.body });
+    res.render('account', {
+        docs: req.body,
+        recommendedProduct: req.recom,
+        url: req.query.active
+    });
 
 exports.getCarts = (req, res) =>
     res.render('cart', { docs: req.body, recommendedProduct: req.recom });
 exports.getWishlistRender = (req, res) =>
-    res.render('wishlist', { docs: req.body });
+    res.render('wishlist', { docs: req.body, recommendedProduct: req.recom });
 
 exports.getAccountDetails = catchAsync(async (req, res, next) => {
     const filterQuery = {};
-
-    filterQuery['productDetails.for'] = process.env.WEBSITE_CATEGORY;
+    if (req.from === 'web') {
+        filterQuery['productDetails.for'] = process.env.WEBSITE_CATEGORY;
+    }
 
     const [address, orders] = await Promise.all([
         addressModel.find({ userId: req.user._id }),
@@ -407,6 +438,34 @@ exports.getAccountDetails = catchAsync(async (req, res, next) => {
             .sort({ createdAt: -1 })
     ]);
     req.body = { address, orders };
-     
     return next();
+});
+
+// create report
+exports.creeateNewReport = catchAsync(async (req, res, next) => {
+    const report = await appReportModel.create({
+        userId: req.user._id,
+        userEId: req.user.ecmuId,
+        title: req.body.title,
+        description: req.body.description,
+        ecmarId: await encryptID()
+    });
+
+    return res.status(200).json({ status: 'Success' });
+});
+
+exports.sendMailForContact = catchAsync(async (req, res, next) => {
+    if (req.files) {
+        req.body.attachments = await Promise.all(
+            req.files.map((file) => {
+                return {
+                    filename: file.originalname,
+                    content: file.buffer
+                };
+            })
+        );
+    }
+
+    await sendMail(req.body);
+    return res.json({ status: 'Success' });
 });

@@ -2,7 +2,7 @@ extends layout/base
 
 block block 
     // Breadcrumb Section
-    .breadcrumb-style.pb-2
+    .breadcrumb-style.pb-2#product_id(data-id=doc.ecmpeId)
         nav.container-xl.mt-1(aria-label='breadcrumb')
             ol.breadcrumb
                 li.breadcrumb-item
@@ -100,6 +100,14 @@ block block
                                 i.bi.bi-bag
                                 |  Add to Cart
                             a.wishlist-add.add_to_wishlist(href='#' data-id=doc.ecmpeId)
+                                i.bi.bi-heart
+                                |  Save to Wishlist
+                        .button-card-mobile
+                            a.buy-now.d-block.text-center.buy_order(href='#') Buy Now
+                            a.add-cart.d-block.text-center.ms-0.add_to_cart(href='#'  data-id=doc.ecmpeId)
+                                i.bi.bi-bag
+                                |  Add to Cart
+                            a.wishlist-add.d-block.text-center.ms-0.add_to_wishlist(href='#' data-id=doc.ecmpeId)
                                 i.bi.bi-heart
                                 |  Save to Wishlist
 

@@ -330,52 +330,61 @@ block block
                     .bg-white.p-1
                         // Product Cards
                         h5.text-dark.fw-bold Result
-                        .row.row-cols-2.row-cols-md-3.row-cols-lg-4.g-1
-                            each doc in docs
-                                .col
-                                    .card.h-100.border-0.bg-light
-                                        .d-flex.justify-content-between.p-2.border-bottom
-                                            i.bi.bi-tree.fs-5
-                                            h5.text-dark.one-line= doc.name
-                                            i.bi.bi-shop.fs-5
-                                        a.ps-5.pe-5.mt-2(href=`/shop/product/${doc.slug}`)
-                                            h5.text-dark.one-line.text-center= doc.category
-                                            img.card-img-top(src=doc.bannerImage alt='...')
-                                            if doc.discountPrice
-                                                h6.p-0.m-0.text-center.mt-2.text-dark.pe-2
-                                                    | Rs.#{doc.discountPrice}
-                                                    span.text-secondary.fw-normal.text-decoration-line-through.product-des.pe-2.ps-2 Rs.#{doc.price}
-                                                    span.fw-normal.main-light.product-des.pe-2
-                                                        | (#{Math.floor(((doc.price-doc.discountPrice)/doc.price)*100)}% OFF)
-                                            else
-                                                p.p-0.m-0.fw-bold.text-center.mt-2.pe-2
-                                                    | Rs.#{doc.price}
-                                        //- .p-2
-                                            select.form-select.border-dark(aria-label='Default select example')
-                                                option(selected='') Open this select menu
-                                                option(value='1') One
-                                                option(value='2') Two
-                                                option(value='3') Three
-                                        .d-flex.justify-content-center
-                                            p.m-0.cursor-pointer.border.border-2.border-dark.p-1.ps-2.me-1.pe-2.text-center.rounded.sub_quantity
-                                                | -
-                                            p.m-0.card-text.border.border-2.border-dark.p-1.text-center.rounded.ps-3.pe-3.count_quantity
-                                                | 1
-                                            p.m-0.cursor-pointer.border.p-0.border-2.border-dark.p-1.ps-2.ms-1.pe-2.text-center.rounded.add_quantity
-                                                | +
+                        if docs.length
+                            .row.row-cols-2.row-cols-md-3.row-cols-lg-4.g-1
+                                each doc in docs
+                                    .col
+                                        .card.h-100.border-0.bg-light
+                                            .d-flex.justify-content-between.p-2.border-bottom
+                                                i.bi.bi-tree.fs-5
+                                                h5.text-dark.one-line= doc.name
+                                                i.bi.bi-shop.fs-5
+                                            a.ps-5.pe-5.mt-2(href=`/shop/product/${doc.slug}`)
+                                                h5.text-dark.one-line.text-center= doc.category
+                                                if !doc.active
+                                                    div(style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);width:70%;")
+                                                        p.p-1.bg-white.opacity-75.fw-bold Out of Stock
+                                                img.card-img-top(src=doc.bannerImage alt='...')
+                                                if doc.discountPrice
+                                                    h6.p-0.m-0.text-center.mt-2.text-dark.pe-2
+                                                        | Rs.#{doc.discountPrice}
+                                                        span.text-secondary.fw-normal.text-decoration-line-through.product-des.pe-2.ps-2 Rs.#{doc.price}
+                                                        span.fw-normal.main-light.product-des.pe-2
+                                                            | (#{Math.floor(((doc.price-doc.discountPrice)/doc.price)*100)}% OFF)
+                                                else
+                                                    p.p-0.m-0.fw-bold.text-center.mt-2.pe-2
+                                                        | Rs.#{doc.price}
+                                            //- .p-2
+                                                select.form-select.border-dark(aria-label='Default select example')
+                                                    option(selected='') Open this select menu
+                                                    option(value='1') One
+                                                    option(value='2') Two
+                                                    option(value='3') Three
+                                            .d-flex.justify-content-center
+                                                p.m-0.cursor-pointer.border.border-2.border-dark.p-1.ps-2.me-1.pe-2.text-center.rounded.sub_quantity
+                                                    | -
+                                                p.m-0.card-text.border.border-2.border-dark.p-1.text-center.rounded.ps-3.pe-3.count_quantity
+                                                    | 1
+                                                p.m-0.cursor-pointer.border.p-0.border-2.border-dark.p-1.ps-2.ms-1.pe-2.text-center.rounded.add_quantity
+                                                    | +
 
-                                        .d-grid
-                                            a.btn-block.cursor-pointer.btn-main.rounded.fw-bold.mt-1.add_to_cart(data-id=doc.ecmpeId) Add to cart
-                        nav.mt-5(aria-label='Page navigation example')
-                            ul.pagination.justify-content-center
-                                li.page-item
-                                    a.page-link.pagination_manage(type="button" aria-label='Previous' data-type="pre")
-                                        span(aria-hidden='true') &laquo;
-                                li.page-item
-                                    - const datas = new URL(url);
-                                    - let num = datas.searchParams.get('page');
-                                    - num = !!num*1?num : 1;
-                                    a.page-link.active#page_no()=num 
-                                li.page-item
-                                    button.page-link.pagination_manage(type="button" aria-label='Next' disabled=docs.length ? false : true class=docs.length ? "" :"bg-light" data-type="next")
-                                        span(aria-hidden='true' ) &raquo;
+                                            .d-grid
+                                                a.btn-block.cursor-pointer.btn-main.rounded.fw-bold.mt-1.add_to_cart(data-id=doc.ecmpeId) Add to cart
+                        else if !docs.length && search
+                            .text-center
+                                img.w-50.m-auto.text-center(src='/Assets/Images/404.jpg' alt='mouse corsair')
+                            p.text-center.m-2.text-lead.h4.fw-bold This product is currently not available or Search not found.
+                        if docs.length                      
+                            nav.mt-5(aria-label='Page navigation example')
+                                ul.pagination.justify-content-center
+                                    li.page-item
+                                        a.page-link.pagination_manage(type="button" aria-label='Previous' data-type="pre")
+                                            span(aria-hidden='true') &laquo;
+                                    li.page-item
+                                        - const datas = new URL(url);
+                                        - let num = datas.searchParams.get('page');
+                                        - num = !!num*1?num : 1;
+                                        a.page-link.active#page_no()=num 
+                                    li.page-item
+                                        button.page-link.pagination_manage(type="button" aria-label='Next' disabled=docs.length ? false : true class=docs.length ? "" :"bg-light" data-type="next")
+                                            span(aria-hidden='true' ) &raquo;

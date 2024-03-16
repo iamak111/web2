@@ -166,7 +166,7 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
     switch (req.body.productType) {
         case 'single':
             if (req.body.discountPrice)
-                if (req.body.discountPrice >= req.body.price) {
+                if (req.body.discountPrice * 1 >= req.body.price * 1) {
                     return next(
                         new AppError(
                             'Discount price should be less then price.',
@@ -210,10 +210,10 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
 
             let productDetails = await Promise.all(
                 req.body.productDetails.map(async (el, index) => {
-                    if (el.subDetails[0].discountPrice)
+                    if (el.subDetails[0].discountPrice * 1)
                         if (
-                            el.subDetails[0].discountPrice >=
-                            el.subDetails[0].price
+                            el.subDetails[0].discountPrice * 1 >=
+                            el.subDetails[0].price * 1
                         ) {
                             return next(
                                 new AppError(
@@ -295,7 +295,7 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
                             new AppError('Size should be included.', 400)
                         );
                     if (el.discountPrice)
-                        if (el.discountPrice >= el.price) {
+                        if (el.discountPrice * 1 >= el.price * 1) {
                             return next(
                                 new AppError(
                                     'Discount price should be less then price.',
@@ -375,7 +375,7 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
                                     )
                                 );
                             if (els.discountPrice)
-                                if (els.discountPrice >= els.price) {
+                                if (els.discountPrice * 1 >= els.price * 1) {
                                     return next(
                                         new AppError(
                                             'Discount price should be less then price.',
@@ -484,10 +484,11 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
     } else {
         deal.dealOfTheDay = false;
     }
+
     switch (req.body.productType) {
         case 'single':
             if (req.body.discountPrice)
-                if (req.body.discountPrice >= req.body.price) {
+                if (req.body.discountPrice * 1 >= req.body.price * 1) {
                     return next(
                         new AppError(
                             'Discount price should be less then price.',
@@ -531,8 +532,8 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
                 req.body.productDetails.map(async (el, index) => {
                     if (el.subDetails[0].discountPrice)
                         if (
-                            el.subDetails[0].discountPrice >=
-                            el.subDetails[0].price
+                            el.subDetails[0].discountPrice * 1 >=
+                            el.subDetails[0].price * 1
                         ) {
                             return next(
                                 new AppError(
@@ -611,7 +612,7 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
                             new AppError('Size should be included.', 400)
                         );
                     if (el.discountPrice)
-                        if (el.discountPrice >= el.price) {
+                        if (el.discountPrice * 1 >= el.price * 1) {
                             return next(
                                 new AppError(
                                     'Discount price should be less then price.',
@@ -690,7 +691,7 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
                                     )
                                 );
                             if (els.discountPrice)
-                                if (els.discountPrice >= els.price) {
+                                if (els.discountPrice * 1 >= els.price * 1) {
                                     return next(
                                         new AppError(
                                             'Discount price should be less then price.',
@@ -749,7 +750,7 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
                 categorie: categorie.name,
                 for: categorie.for,
                 description: req.body.description,
-                productType: 'single',
+                productType: 'colorWithSize',
                 bannerImage: req.body.bannerImage,
                 imageGallery: req.body.imageGallery,
                 verified: true,
@@ -758,6 +759,7 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
                 features: req.body.features,
                 ...deal
             };
+
             next();
             break;
     }
@@ -788,9 +790,12 @@ exports.deleteProudct = catchAsync(async (req, res, next) => {
 exports.getAllProduct = catchAsync(async (req, res, next) => {
     let filterQuery = {};
 
-    if (req.query.search) filterQuery.$text = { $search: req.query.search };
-
-    filterQuery.for = process.env.WEBSITE_CATEGORY;
+    if (req.query.search) {
+        filterQuery.$text = { $search: req.query.search };
+    }
+    if (req.from === 'web') {
+        filterQuery.for = process.env.WEBSITE_CATEGORY;
+    }
     filterQuery.verified = true;
 
     if (!!req.query.category) {
@@ -804,13 +809,13 @@ exports.getAllProduct = catchAsync(async (req, res, next) => {
                     {
                         discountPrice: {
                             $ne: 0,
-                            $gt: req.params.min * 1 ? req.params.min * 1 : 0
+                            $gte: req.query.min * 1 ? req.query.min * 1 : 0
                         }
                     },
                     {
                         discountPrice: 0,
                         price: {
-                            $gt: req.params.min * 1 ? req.params.min * 1 : 0
+                            $gte: req.query.min * 1 ? req.query.min * 1 : 0
                         }
                     }
                 ]
@@ -820,13 +825,13 @@ exports.getAllProduct = catchAsync(async (req, res, next) => {
                     {
                         discountPrice: {
                             $ne: 0,
-                            $lte: req.params.max * 1 ? req.params.max * 1 : 0
+                            $lte: req.query.max * 1 ? req.query.max * 1 : 0
                         }
                     },
                     {
                         discountPrice: 0,
                         price: {
-                            $lte: req.params.max * 1 ? req.params.max * 1 : 0
+                            $lte: req.query.max * 1 ? req.query.max * 1 : 0
                         }
                     }
                 ]
@@ -837,16 +842,17 @@ exports.getAllProduct = catchAsync(async (req, res, next) => {
             {
                 discountPrice: {
                     $ne: 0,
-                    $gt: req.params.min * 1 ? req.params.min * 1 : 0
+                    $gte: req.query.min * 1 ? req.query.min * 1 : 0
                 }
             },
             {
                 discountPrice: 0,
                 price: {
-                    $gte: req.params.min * 1 ? req.params.min * 1 : 0
+                    $gte: req.query.min * 1 ? req.query.min * 1 : 0
                 }
             }
         ];
+
     let sort = { createdAt: -1 };
     if (req.query.sort) {
         if (req.query.sort === 'low') {
@@ -966,21 +972,33 @@ exports.getAllProduct = catchAsync(async (req, res, next) => {
             }
         ])
     ]);
+
     size = !size ? [] : size.size;
     color = !color ? [] : color.color;
 
-    console.log(JSON.stringify(docs));
-    return res.render('shop', {
-        docs,
-        size,
-        color,
-        url: req.protocol + '://' + req.get('host') + req.originalUrl
-    });
+    if (req.from === 'mobile') {
+        const cate = await categorieModel.find();
+        return res.status(200).json({
+            status: 'Success',
+            docs,
+            size: size.sort(),
+            color: color.sort(),
+            categories: cate
+        });
+    } else
+        return res.render('shop', {
+            docs,
+            size: size.sort(),
+            color: color.sort(),
+            url: req.protocol + '://' + req.get('host') + req.originalUrl,
+            search: !!req.query.search
+        });
 });
 
 // assign data for get a product
 exports.getAProduct = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web' ? { for: process.env.WEBSITE_CATEGORY } : [];
     const product = await productModel
         .findOne({
             slug: req.params.productId ?? req.params.slug,
@@ -988,13 +1006,35 @@ exports.getAProduct = catchAsync(async (req, res, next) => {
             ...filterQur
         })
         .populate('reviews');
-    console.log(JSON.stringify(product));
+
     if (!product) return next(new AppError('Product not found!.', 404));
 
     req.body = product;
     return next();
 });
 
+// get recommnder product
+exports.getRecommendedProducts = catchAsync(async (req, res, next) => {
+    let fors = [];
+    if (req.from !== 'mobile') {
+        filterQuery = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
+        fors = { for: process.env.WEBSITE_CATEGORY };
+    }
+    const recommendedProduct = await productModel.aggregate([
+        { $match: { ...fors } },
+        { $sample: { size: 8 } }
+    ]);
+
+    req.recom = recommendedProduct;
+    return next();
+});
+
+exports.sendRecommendedProducts = (req, res) => {
+    return res.status(200).json({
+        status: 'Success',
+        docs: req.recom
+    });
+};
 // send jsong
 exports.sendAProduct = (req, res) => {
     return res.status(200).json({
@@ -1008,7 +1048,8 @@ exports.assignOrderProducts = catchAsync(async (req, res, next) => {
     if (!req.body?.length)
         return next(new AppError('Please select the product.', 400));
 
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web' ? { for: process.env.WEBSITE_CATEGORY } : [];
 
     const cart = await Promise.all(
         req.body.map(async (el) => {
@@ -1021,7 +1062,13 @@ exports.assignOrderProducts = catchAsync(async (req, res, next) => {
 
             if (!el.quantity)
                 return next(new AppError('Please select the quantity.', 400));
-
+            if (!product.active)
+                return next(
+                    new AppError(
+                        `Product ${product.name} was out of stock.`,
+                        400
+                    )
+                );
             switch (product.productType) {
                 case 'single':
                     const obj = {
@@ -1203,6 +1250,7 @@ exports.orderProduct = catchAsync(async (req, res, next) => {
                         userAddress: address,
                         productDetails: {
                             productId: el.product._id,
+                            
                             name: el.product.name,
                             description: el.product.description,
                             categorie: el.product.categorie,
@@ -1299,9 +1347,9 @@ exports.orderProduct = catchAsync(async (req, res, next) => {
                                     el.product.productDetails[0].bannerImage;
                                 sizOn.imageGallery =
                                     el.product.productDetails[0].imageGallery;
-                                sizOn.size = els.size;
                                 sizOn.price = els.price;
                                 sizOn.discountPrice = els.discountPrice;
+                                sizOn.size = els.size;
                             }
                         })
                     );
@@ -1418,7 +1466,10 @@ exports.orderProduct = catchAsync(async (req, res, next) => {
 
 // get my orders
 exports.getMyOrders = catchAsync(async (req, res, next) => {
-    const filterQur = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web'
+            ? { 'productDetails.for': process.env.WEBSITE_CATEGORY }
+            : [];
 
     const data = await ordermodel.find({ userId: req.user._id, ...filterQur });
     return res.status(200).json({ status: 'Success', docs: data });
@@ -1426,7 +1477,10 @@ exports.getMyOrders = catchAsync(async (req, res, next) => {
 
 // get a order
 exports.getAOrder = catchAsync(async (req, res, next) => {
-    const filterQur = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web'
+            ? { 'productDetails.for': process.env.WEBSITE_CATEGORY }
+            : [];
 
     const data = await ordermodel.find({
         userId: req.user._id,
@@ -1438,7 +1492,10 @@ exports.getAOrder = catchAsync(async (req, res, next) => {
 
 // cancel order
 exports.cancelAOrder = catchAsync(async (req, res, next) => {
-    const filterQur = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web'
+            ? { 'productDetails.for': process.env.WEBSITE_CATEGORY }
+            : [];
     const order = await ordermodel.findOneAndUpdate(
         {
             ecmorId: req.params.orderId,
@@ -1470,23 +1527,32 @@ exports.cancelAOrder = catchAsync(async (req, res, next) => {
 
 // create new cart
 exports.createNewCart = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web' ? { for: process.env.WEBSITE_CATEGORY } : [];
     const product = await productModel.findOne({
         ...filterQur,
         ecmpeId: req.params.productId,
         verified: true
     });
 
+    let finalRs = {};
+    if (req.from === 'web') {
+        if (req.login) {
+            finalRs = { userId: req.user._id, userEId: req.user.ecmuId };
+        } else {
+            finalRs = { uId: req.cookies.uId };
+        }
+    } else {
+        finalRs = { userId: req.user._id, userEId: req.user.ecmuId };
+    }
     if (!product) return next(new AppError('Product not found.', 404));
 
-    if (!req.body.quantity)
-        return next(new AppError('Please select the quantity.', 400));
+    if (!req.body.quantity) req.body.quantity = 1;
     let cart = {};
     switch (product.productType) {
         case 'single':
             cart = {
-                userId: req.user._id,
-                userEId: req.user.ecmuId,
+                ...finalRs,
                 for: product.for,
                 productId: product._id,
                 productEId: product.ecmpeId,
@@ -1497,19 +1563,21 @@ exports.createNewCart = catchAsync(async (req, res, next) => {
             };
             break;
         case 'colorOnly':
-            if (!req.body.color)
-                return next(new AppError('Please select the color.', 400));
-            const [colors] = await Promise.all([
+            // if (!req.body.color)
+            //     return next(new AppError('Please select the color.', 400));
+            let [colors] = await Promise.all([
                 product.productDetails.find(
                     (els) => els.ecmpsId === req.body.color
                 )
             ]);
 
-            if (!colors) return next(new AppError('Color not found.', 400));
-
+            if (!colors) {
+                colors = product.productDetails[0].ecmpsId;
+            } else {
+                colors = req.body.color;
+            }
             cart = {
-                userId: req.user._id,
-                userEId: req.user.ecmuId,
+                ...finalRs,
                 for: product.for,
                 productId: product._id,
                 productEId: product.ecmpeId,
@@ -1517,25 +1585,26 @@ exports.createNewCart = catchAsync(async (req, res, next) => {
                 ecmcmID: await encryptID(),
                 productType: product.productType,
                 type: 'cart',
-                color: req.body.color
+                color: colors
             };
 
             break;
         case 'sizeOnly':
-            if (!req.body.size)
-                return next(new AppError('Please select the size.', 400));
+            // if (!req.body.size)
+            //     return next(new AppError('Please select the size.', 400));
 
-            const [sizes] = await Promise.all([
+            let [sizes] = await Promise.all([
                 product.productDetails[0].subDetails.find(
                     (els) => els.ecmpssId === req.body.size
                 )
             ]);
 
-            if (!sizes) return next(new AppError('Color not found.', 400));
+            if (!sizes)
+                sizes = product.productDetails[0].subDetails[0].ecmpssId;
+            else sizes = req.body.size;
 
             cart = {
-                userId: req.user._id,
-                userEId: req.user.ecmuId,
+                ...finalRs,
                 for: product.for,
                 productId: product._id,
                 productEId: product.ecmpeId,
@@ -1543,15 +1612,15 @@ exports.createNewCart = catchAsync(async (req, res, next) => {
                 ecmcmID: await encryptID(),
                 productType: product.productType,
                 type: 'cart',
-                size: req.body.size
+                size: sizes
             };
 
             break;
         case 'colorWithSize':
-            if (!req.body.size)
-                return next(new AppError('Please select the size.', 400));
-            if (!req.body.color)
-                return next(new AppError('Please select the color.', 400));
+            // if (!req.body.size)
+            //     return next(new AppError('Please select the size.', 400));
+            // if (!req.body.color)
+            //     return next(new AppError('Please select the color.', 400));
             let color = false,
                 size = false;
             await Promise.all([
@@ -1568,13 +1637,14 @@ exports.createNewCart = catchAsync(async (req, res, next) => {
                 })
             ]);
 
-            if (!color) return next(new AppError('Color not found.', 400));
-
-            if (!size) return next(new AppError('Size not found.', 400));
+            if (!color || !size) {
+                req.body.color = product.productDetails[0].ecmpsId;
+                req.body.size =
+                    product.productDetails[0].subDetails[0].ecmpssId;
+            }
 
             cart = {
-                userId: req.user._id,
-                userEId: req.user.ecmuId,
+                ...finalRs,
                 for: product.for,
                 productId: product._id,
                 productEId: product.ecmpeId,
@@ -1590,7 +1660,7 @@ exports.createNewCart = catchAsync(async (req, res, next) => {
     }
 
     await cartModel.updateOne(
-        { productId: product._id, userId: req.user._id },
+        { productId: product._id, ...finalRs },
         { $set: cart },
         {
             upsert: true
@@ -1602,12 +1672,17 @@ exports.createNewCart = catchAsync(async (req, res, next) => {
 
 // my carts
 exports.myCarts = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    let filterQur = {};
+    if (req.from === 'web') {
+        filterQur.for = process.env.WEBSITE_CATEGORY;
+        if (req.login) {
+            filterQur.userId = req.user._id;
+        } else filterQur.uId = req.cookies.uId;
+    } else filterQur.userId = req.user._id;
 
     const carts = await cartModel.aggregate([
         {
             $match: {
-                userId: req.user._id,
                 type: 'cart',
                 ...filterQur
             }
@@ -1638,12 +1713,14 @@ exports.myCarts = catchAsync(async (req, res, next) => {
                 case 'single':
                     el = {
                         bannerImage: el.product.bannerImage,
+                        active: el.product.active,
                         name: el.product.name,
                         price: el.product.price,
                         discountPrice: el.product.discountPrice,
                         type: 'single',
                         quantity: el.quantity,
-                        id: el.ecmcmID
+                        id: el.ecmcmID,
+                        product: el.productEId
                     };
                     price = price + el.price * el.quantity;
                     discountPrice =
@@ -1671,11 +1748,14 @@ exports.myCarts = catchAsync(async (req, res, next) => {
                         bannerImage: color.bannerImage,
                         price: color.subDetails[0].price,
                         discountPrice: color.subDetails[0].discountPrice,
+                        active: el.product.active,
                         name: el.product.name,
                         color: color.color,
+                        colorId: el.color,
                         type: 'colorOnly',
                         quantity: el.quantity,
-                        id: el.ecmcmID
+                        id: el.ecmcmID,
+                        product: el.productEId
                     };
                     price = price + color.subDetails[0].price * el.quantity;
                     discountPrice =
@@ -1705,11 +1785,14 @@ exports.myCarts = catchAsync(async (req, res, next) => {
                         bannerImage: el.product.productDetails[0].bannerImage,
                         price: size.price,
                         discountPrice: size.discountPrice,
+                        active: el.product.active,
                         name: el.product.name,
                         size: size.size,
+                        sizeId: el.size,
                         type: 'sizeOnly',
                         quantity: el.quantity,
-                        id: el.ecmcmID
+                        id: el.ecmcmID,
+                        product: el.productEId
                     };
                     price = price + size.price * el.quantity;
 
@@ -1739,15 +1822,20 @@ exports.myCarts = catchAsync(async (req, res, next) => {
                                             sizs = true;
                                         colVals.price = els2.price;
                                         colVals.size = els2.size;
+                                        
                                         colVals.discountPrice =
                                             els2.discountPrice;
                                         colVals.bannerImage = els.bannerImage;
                                         colVals.imageGallery = els.imageGallery;
                                         colVals.color = els.color;
                                         colVals.name = el.product.name;
+                                        colVals.active = el.product.active;
                                         colVals.quantity = el.quantity;
                                         colVals.type = 'colorWithSize';
                                         colVals.id = el.ecmcmID;
+                                        colVals.product = el.productEId;
+                                        colVals.colorId = els.ecmpsId;
+                                        colVals.sizeId = els2.ecmpssId;
                                     })
                                 );
                             }
@@ -1779,10 +1867,15 @@ exports.sendJsonForCart = (req, res) =>
 
 // delet my cart
 exports.deleteMyCart = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    let filterQur = {};
+    if (req.from === 'web') {
+        filterQur.for = process.env.WEBSITE_CATEGORY;
+        if (req.login) {
+            filterQur.userId = req.user._id;
+        } else filterQur.uId = req.cookies.uId;
+    } else filterQur.userId = req.user._id;
 
     const carts = await cartModel.findOneAndDelete({
-        userId: req.user._id,
         ...filterQur,
         ecmcmID: req.params.productId
     });
@@ -1794,7 +1887,8 @@ exports.deleteMyCart = catchAsync(async (req, res, next) => {
 
 // create new art
 exports.addWishList = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web' ? { for: process.env.WEBSITE_CATEGORY } : [];
     const product = await productModel.findOne({
         ...filterQur,
         ecmpeId: req.params.productId,
@@ -1809,6 +1903,7 @@ exports.addWishList = catchAsync(async (req, res, next) => {
             $set: {
                 userId: req.user._id,
                 productId: product._id,
+                productEId: product.ecmpeId,
                 for: product.for,
                 ecmwlId: await encryptID()
             }
@@ -1823,7 +1918,8 @@ exports.addWishList = catchAsync(async (req, res, next) => {
 
 // my wishlit
 exports.getMyWishlist = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web' ? { for: process.env.WEBSITE_CATEGORY } : [];
 
     const wishlist = await wishlistModel.find({
         userId: req.user._id,
@@ -1843,7 +1939,8 @@ exports.sendWishlistJson = (req, res) =>
 
 // delet my cart
 exports.deleteWishLists = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web' ? { for: process.env.WEBSITE_CATEGORY } : [];
 
     const wishlits = await wishlistModel.findOneAndDelete({
         userId: req.user._id,
@@ -1857,7 +1954,8 @@ exports.deleteWishLists = catchAsync(async (req, res, next) => {
 });
 
 exports.getAdditionalProductDetails = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web' ? { for: process.env.WEBSITE_CATEGORY } : [];
     const product = await productModel
         .findOne({
             ecmpeId: req.params.productId,
@@ -1887,7 +1985,8 @@ exports.getAdditionalProductDetails = catchAsync(async (req, res, next) => {
 
 //
 exports.moveCartToCheckout = catchAsync(async (req, res, next) => {
-    const filterQur = { for: process.env.WEBSITE_CATEGORY };
+    const filterQur =
+        req.from === 'web' ? { for: process.env.WEBSITE_CATEGORY } : [];
     const [carts, b] = await Promise.all([
         cartModel.find({
             userId: req.user._id,
@@ -1922,6 +2021,14 @@ exports.moveCartToCheckout = catchAsync(async (req, res, next) => {
                                     400
                                 )
                             );
+                        
+                        if (!els.productId.active)
+                            return next(
+                                new AppError(
+                                    `Product ${els.productId.name} was out of stock.`,
+                                    400
+                                )
+                            );
                         await cartModel.create({
                             productEId: els.productEId,
                             productId: els.productId._id,
@@ -1944,18 +2051,178 @@ exports.moveCartToCheckout = catchAsync(async (req, res, next) => {
     return res.status(200).json({ status: 'Success' });
 });
 
-// get recommnder product
-exports.getRecommendedProducts = catchAsync(async (req, res, next) => {
-    let fors = [];
+exports.getVendorHome = catchAsync(async (req, res, next) => {
+    const year = req.query.year ? req.query.year * 1 : new Date().getFullYear();
+    const startDate = new Date(
+        !!year ? year : new Date().getFullYear(),
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    );
+    const endDate = new Date(
+        !!year ? year : new Date().getFullYear(),
+        11,
+        31,
+        23,
+        59,
+        59,
+        999
+    );
+    const [productsCount, ordersCount, [orderStates], products, orders] =
+        await Promise.all([
+            productModel.count({ vendorId: req.user._id }),
+            ordermodel.count({ 'productDetails.vendorId': req.user._id }),
+            ordermodel.aggregate([
+                {
+                    $match: {
+                        'productDetails.vendorId': req.user._id,
+                        createdAt: { $gte: startDate, $lt: endDate }
+                    }
+                },
+                {
+                    $project: {
+                        _id: null,
+                        data: { $month: '$createdAt' }
+                    }
+                },
+                {
+                    $sort: { data: -1 }
+                },
+                {
+                    $group: {
+                        _id: '$data',
+                        count: { $sum: 1 }
+                    }
+                },
 
-    filterQuery = { 'productDetails.for': process.env.WEBSITE_CATEGORY };
-    fors = { for: process.env.WEBSITE_CATEGORY };
+                {
+                    $group: {
+                        _id: null,
+                        mergedObjects: {
+                            $push: {
+                                k: { $toString: '$_id' },
+                                v: '$count'
+                            }
+                        }
+                    }
+                },
+                {
+                    $replaceRoot: {
+                        newRoot: { $arrayToObject: '$mergedObjects' }
+                    }
+                }
+            ]),
+            productModel
+                .find({ vendorId: req.user._id })
+                .sort({ createdAt: -1 })
+                .limit(5),
+            ordermodel
+                .find({ 'productDetails.vendorId': req.user._id })
+                .sort({ createdAt: -1 })
+                .limit(5)
+        ]);
 
-    const recommendedProduct = await productModel.aggregate([
-        { $match: { ...fors } },
-        { $sample: { size: 8 } }
+    return res.json({
+        status: 'Success',
+        productsCount,
+        ordersCount,
+        orderStates,
+        products,
+        orders
+    });
+});
+
+exports.getVendorOrders = catchAsync(async (req, res, next) => {
+    const activepage = !!req.query?.apage * 1 ? req.query?.apage * 1 : 1;
+    const compage = !!req.query?.cpage * 1 ? req.query?.cpage * 1 : 1;
+    const [[order], activecount, historycount] = await Promise.all([
+        ordermodel.aggregate([
+            {
+                $match: {
+                    'productDetails.vendorId': req.user._id
+                }
+            },
+            {
+                $facet: {
+                    active: [
+                        {
+                            $match: {
+                                'orderDetails.productOrderStatus': 'pending'
+                            }
+                        },
+                        {
+                            $sort: { createdAt: -1 }
+                        },
+                        {
+                            $skip: ((!!activepage ? activepage : 1) - 1) * 25
+                        },
+                        { $limit: 25 }
+                    ],
+                    history: [
+                        {
+                            $match: {
+                                'orderDetails.productOrderStatus': {
+                                    $ne: 'pending'
+                                }
+                            }
+                        },
+                        {
+                            $sort: { createdAt: -1 }
+                        },
+                        {
+                            $skip: ((!!compage ? compage : 1) - 1) * 25
+                        },
+                        { $limit: 25 }
+                    ]
+                }
+            }
+        ]),
+        ordermodel.count({
+            'productDetails.vendorId': req.user._id,
+            'orderDetails.productOrderStatus': 'pending'
+        }),
+        ordermodel.count({
+            'productDetails.vendorId': req.user._id,
+            'orderDetails.productOrderStatus': { $ne: 'pending' }
+        })
     ]);
 
-    req.recom = recommendedProduct;
-    return next();
+    return res.json({ status: 'Success', order, activecount, historycount });
+});
+
+exports.getOrderDetails = catchAsync(async (req, res, next) => {
+    const order = await ordermodel.findOne({
+        'productDetails.vendorId': req.user._id,
+        ecmorId: req.params.orderId
+    });
+
+    if (!order) return next(new AppError('Order not found!', 404));
+
+    return res.status(200).json({ status: 'Success', docs: order });
+});
+
+exports.getMyProducts = catchAsync(async (req, res, next) => {
+    const pgno = !!req.query?.page * 1 ? req.query?.page * 1 : 1;
+    const products = await productModel
+        .find({ vendorId: req.user._id })
+        .sort({ createdAt: -1 })
+        .skip(((!!pgno ? pgno : 1) - 1) * 25)
+        .limit(25);
+    const count = await productModel.count({ vendorId: req.user._id });
+    return res.json({ status: 'Success', docs: products, count });
+});
+
+exports.getMyProduct = catchAsync(async (req, res, next) => {
+    const product = await productModel
+        .findOne({
+            vendorId: req.user._id,
+            ecmpeId: req.params.productId
+        })
+        .populate('reviews');
+    if (!product) return next(new AppError('Product not found.', 404));
+
+    return res.json({ status: 'Success', docs: product });
 });

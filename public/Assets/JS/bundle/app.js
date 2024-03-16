@@ -10,7 +10,9 @@ import {
     addToCart,
     addToWishlist,
     buyProduct,
-    getAdditionalDetails
+    getAdditionalDetails,
+    moveCartToCart,
+    sendEmail
 } from './controllers/productControllers';
 import {
     adNewAddress,
@@ -44,6 +46,8 @@ const remove_wishlist = document.querySelectorAll('.remove_wishlist');
 const update_address = document.querySelectorAll('.update_address');
 const cancel_order = document.querySelectorAll('.cancel_order');
 const udpate_user = document.getElementById('udpate_user');
+const send_email = document.getElementById('send_email');
+const move_cart = document.querySelectorAll('.move_cart');
 
 if (send_otp) {
     send_otp.addEventListener('submit', (e) => {
@@ -178,7 +182,7 @@ if (add_to_cart.length) {
             if (color_selection) color = color_selection.dataset.color;
             const count_quantity =
                 document.getElementsByClassName(`count_quantity`)[i].innerText;
-            
+
             return addToCart(e.target.dataset.id, {
                 quantity: count_quantity,
                 size,
@@ -270,7 +274,7 @@ if (place_order) {
 if (cart_to_checkout) {
     cart_to_checkout.addEventListener('click', async (e) => {
         e.preventDefault();
-        const cart = document.querySelectorAll('.count_quantity');
+        const cart = document.querySelectorAll('.checkout_carts');
         const doc = await Promise.all(
             [...cart].map((el) => {
                 return { id: el.dataset.id, quantity: el.innerText * 1 };
@@ -341,5 +345,40 @@ if (udpate_user) {
         const name = document.getElementById('u_name').value;
         const email = document.getElementById('u_email').value;
         return updateUser({ name, email });
+    });
+}
+
+if (move_cart.length) {
+    [...move_cart].map((el) => {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = e.target.dataset.id;
+            return moveCartToCart(id, e.target.dataset.product);
+        });
+    });
+}
+
+if (send_email) {
+    send_email.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const form = new FormData();
+        form.append('firstName', document.getElementById('fname').value);
+        form.append('lastName', document.getElementById('flast').value);
+        form.append('email', document.getElementById('email').value);
+        form.append('phone', document.getElementById('phone').value);
+        form.append('order', document.getElementById('order').value);
+
+        if (document.getElementById('file').files)
+            [...document.getElementById('file').files].map((el) => {
+                console.log(el);
+                form.append('file', el);
+            });
+        form.append('message', document.getElementById('message').value);
+        form.append(
+            'category',
+            document.querySelector('input[name="flexRadioDefault"]:checked')
+                .value
+        );
+        return sendEmail(form);
     });
 }

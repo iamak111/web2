@@ -79,7 +79,6 @@ exports.findOneAndUpdate = (Model) =>
             new: true,
             runValidators: true
         });
-        console.log(req.searchQuery);
         if (!doc) {
             return next(
                 new AppError("can't find a document with this id", 404)

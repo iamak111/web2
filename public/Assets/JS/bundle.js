@@ -26557,7 +26557,7 @@ exports.updateUser = updateUser;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getAdditionalDetails = exports.buyProduct = exports.addToWishlist = exports.addToCart = void 0;
+exports.sendEmail = exports.moveCartToCart = exports.getAdditionalDetails = exports.buyProduct = exports.addToWishlist = exports.addToCart = void 0;
 var _axios = _interopRequireDefault(require("axios"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -26795,6 +26795,112 @@ var getAdditionalDetails = /*#__PURE__*/function () {
   };
 }();
 exports.getAdditionalDetails = getAdditionalDetails;
+var moveCartToCart = /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(id, id2) {
+    var _err$response5;
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          _context6.prev = 0;
+          _context6.next = 3;
+          return (0, _axios.default)({
+            method: 'DELETE',
+            url: "/api/v1/user/wishlist/".concat(id)
+          }).then( /*#__PURE__*/function () {
+            var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(res) {
+              return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
+                  case 0:
+                    if (!(res.data.status === 'Success')) {
+                      _context5.next = 3;
+                      break;
+                    }
+                    _context5.next = 3;
+                    return (0, _axios.default)({
+                      method: 'POST',
+                      url: "/api/v1/user/cart/".concat(id2)
+                    }).then(function (res) {
+                      if (res.data.status === 'Success') {
+                        alert('Product Successfully moved to cart.');
+                        location.reload();
+                      }
+                    });
+                  case 3:
+                  case "end":
+                    return _context5.stop();
+                }
+              }, _callee5);
+            }));
+            return function (_x9) {
+              return _ref6.apply(this, arguments);
+            };
+          }());
+        case 3:
+          _context6.next = 12;
+          break;
+        case 5:
+          _context6.prev = 5;
+          _context6.t0 = _context6["catch"](0);
+          if (!(_context6.t0 !== null && _context6.t0 !== void 0 && (_err$response5 = _context6.t0.response) !== null && _err$response5 !== void 0 && (_err$response5 = _err$response5.data) !== null && _err$response5 !== void 0 && _err$response5.message)) {
+            _context6.next = 11;
+            break;
+          }
+          return _context6.abrupt("return", alert(_context6.t0.response.data.message));
+        case 11:
+          return _context6.abrupt("return", alert('Somthing went wrong. Please try again.'));
+        case 12:
+        case "end":
+          return _context6.stop();
+      }
+    }, _callee6, null, [[0, 5]]);
+  }));
+  return function moveCartToCart(_x7, _x8) {
+    return _ref5.apply(this, arguments);
+  };
+}();
+exports.moveCartToCart = moveCartToCart;
+var sendEmail = /*#__PURE__*/function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(data) {
+    var _err$response6;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          _context7.prev = 0;
+          _context7.next = 3;
+          return (0, _axios.default)({
+            method: 'POST',
+            url: '/api/v1/user/send-mail',
+            data: data
+          }).then(function (res) {
+            if (res.data.status === 'Success') {
+              alert('Your requrest submited successfully.');
+              return location.reload();
+            }
+          });
+        case 3:
+          _context7.next = 12;
+          break;
+        case 5:
+          _context7.prev = 5;
+          _context7.t0 = _context7["catch"](0);
+          if (!(_context7.t0 !== null && _context7.t0 !== void 0 && (_err$response6 = _context7.t0.response) !== null && _err$response6 !== void 0 && (_err$response6 = _err$response6.data) !== null && _err$response6 !== void 0 && _err$response6.message)) {
+            _context7.next = 11;
+            break;
+          }
+          return _context7.abrupt("return", alert(_context7.t0.response.data.message));
+        case 11:
+          return _context7.abrupt("return", alert('Somthing went wrong. Please try again.'));
+        case 12:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7, null, [[0, 5]]);
+  }));
+  return function sendEmail(_x10) {
+    return _ref7.apply(this, arguments);
+  };
+}();
+exports.sendEmail = sendEmail;
 },{"axios":"../../../../node_modules/axios/index.js"}],"controllers/orderControllers.js":[function(require,module,exports) {
 "use strict";
 
@@ -27206,6 +27312,8 @@ var remove_wishlist = document.querySelectorAll('.remove_wishlist');
 var update_address = document.querySelectorAll('.update_address');
 var cancel_order = document.querySelectorAll('.cancel_order');
 var udpate_user = document.getElementById('udpate_user');
+var send_email = document.getElementById('send_email');
+var move_cart = document.querySelectorAll('.move_cart');
 if (send_otp) {
   send_otp.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -27404,7 +27512,7 @@ if (cart_to_checkout) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             e.preventDefault();
-            cart = document.querySelectorAll('.count_quantity');
+            cart = document.querySelectorAll('.checkout_carts');
             _context.next = 4;
             return Promise.all(_toConsumableArray(cart).map(function (el) {
               return {
@@ -27486,6 +27594,33 @@ if (udpate_user) {
     });
   });
 }
+if (move_cart.length) {
+  _toConsumableArray(move_cart).map(function (el) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = e.target.dataset.id;
+      return (0, _productControllers.moveCartToCart)(id, e.target.dataset.product);
+    });
+  });
+}
+if (send_email) {
+  send_email.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var form = new FormData();
+    form.append('firstName', document.getElementById('fname').value);
+    form.append('lastName', document.getElementById('flast').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('phone', document.getElementById('phone').value);
+    form.append('order', document.getElementById('order').value);
+    if (document.getElementById('file').files) _toConsumableArray(document.getElementById('file').files).map(function (el) {
+      console.log(el);
+      form.append('file', el);
+    });
+    form.append('message', document.getElementById('message').value);
+    form.append('category', document.querySelector('input[name="flexRadioDefault"]:checked').value);
+    return (0, _productControllers.sendEmail)(form);
+  });
+}
 },{"core-js/actual":"../../../../node_modules/core-js/actual/index.js","regenerator-runtime/runtime.js":"../../../../node_modules/regenerator-runtime/runtime.js","./controllers/sharedControllers":"controllers/sharedControllers.js","./controllers/productControllers":"controllers/productControllers.js","./controllers/orderControllers":"controllers/orderControllers.js"}],"../../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -27511,7 +27646,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58859" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51004" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

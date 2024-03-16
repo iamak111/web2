@@ -10,6 +10,10 @@ const wishListSchema = new mongoose.Schema(
             type: mongoose.Schema.ObjectId,
             ref: 'Products'
         },
+        productEId: {
+            type: String,
+            required: true
+        },
         for: {
             type: String,
             enum: [process.env.CATEGORYA, process.env.CATEGORYB],

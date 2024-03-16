@@ -21,6 +21,8 @@ exports.updateReview = catchAsync(async (req, res, next) => {
             )
         );
 
+    if (!req.body.review || !req.body.rating)
+        return next(new AppError('Review and ratings should be included.'));
     const review = await reviewModel.updateOne(
         {
             productId: order.productDetails.productId,

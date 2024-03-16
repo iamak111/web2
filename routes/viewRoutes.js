@@ -47,11 +47,11 @@ router.get(
 router.get('/thank-you', authControllers.protect, userController.thankYouGet);
 router.get(
     '/cart',
-    authControllers.protect,
     productController.myCarts,
     productController.getRecommendedProducts,
     userController.getCarts
 );
+router.get('/contact-us', viewController.getContactus);
 
 router.get(
     '/wishlist',

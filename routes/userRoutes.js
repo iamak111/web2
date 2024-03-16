@@ -1,5 +1,8 @@
 // import expess
 const express = require('express');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // import user controller
 const userController = require('../controllers/userController');
@@ -15,6 +18,7 @@ const router = express.Router();
 // router.route('/').get(authController.protect, userController.getAlluser);
 router.post('/user-otp', authController.userOtpGenerate);
 router.patch('/verify-user', authController.verifyUserOtp);
+router.post('/send-mail', upload.any(), userController.sendMailForContact);
 // router.route('/signUp').post(authController.signup);
 
 // router.route('/login').post(authController.login);
@@ -92,8 +96,8 @@ router.post(
 // new cart
 router
     .route('/cart/:productId')
-    .post(authController.protect, productControllers.createNewCart)
-    .delete(authController.protect, productControllers.deleteMyCart);
+    .post(authController.protectCart, productControllers.createNewCart)
+    .delete(authController.protectCart, productControllers.deleteMyCart);
 
 router
     .route('/wishlist/:productId')

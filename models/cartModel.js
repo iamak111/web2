@@ -4,12 +4,10 @@ const cartSchema = new mongoose.Schema(
     {
         userId: {
             type: mongoose.Schema.ObjectId,
-            ref: 'Users',
-            requried: true
+            ref: 'Users'
         },
         userEId: {
-            type: String,
-            required: true
+            type: String
         },
         for: {
             type: String,
@@ -51,7 +49,8 @@ const cartSchema = new mongoose.Schema(
             type: String,
             required: true,
             enum: ['order', 'cart']
-        }
+        },
+        uId: String
     },
     { timestamps: true }
 );
@@ -59,7 +58,7 @@ cartSchema.pre(/^find/, function (next) {
     this.populate([
         {
             path: 'productId',
-            select: 'name bannerImage price categories discountPrice description productType createdAt vendor for'
+            select: 'name bannerImage price categories discountPrice description productType createdAt vendor for active'
         }
     ]);
     next();
