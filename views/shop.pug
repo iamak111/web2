@@ -6,21 +6,40 @@ mixin filters(fors)
     - updatedUrl.searchParams.get('category');
     - let params = updatedUrl.searchParams.get('category');
     - updatedUrl.searchParams.delete('category');
+    - updatedUrl.searchParams.delete('subCategory');
     - let urlCategory = updatedUrl.toString()
     - urlCategory = urlCategory.split('?').length <= 1 ? `${urlCategory}?` :`${urlCategory}&`;
     - urlCategory = new URL(urlCategory);
     -  urlCategory = urlCategory.href.split(urlCategory.origin)[1]
-    - params = !!params ? params : ""
+    - params = !!params ? params : "";
     each doc,i in category
         .form-check
-            - let uParams = params.split(',');
-            - const cateCheck = uParams.includes(doc.name) ? true :false;
-            - const index = uParams.indexOf(doc.name);
-            - cateCheck ? uParams.splice(index,1) : uParams.push(doc.name) ;
+            - let uParams = params;
+            - const cateCheck = uParams === doc.name ? true :false;
+            - uParams = cateCheck ? "" : doc.name;
+            - console.log(url)
             input.form-check-input(type='checkbox' value='',checked=cateCheck 
-            onClick=`window.location = '${urlCategory}category=${uParams.join(',').replace(/(^,|,$|,,)/g, '')}';`,id=`cat-check-${i}` )
+            onClick=`window.location = '${urlCategory}category=${uParams}';`,id=`cat-check-${i}` )
             label.form-check-label(for=`cat-check-${i}`)
                 | #{doc.name}
+            - let subUpdatedUrl = new URL(url);
+            - subUpdatedUrl.searchParams.get('subCategory');
+            - let subParams = subUpdatedUrl.searchParams.get('subCategory');
+            - subUpdatedUrl.searchParams.delete('subCategory');
+            - subUpdatedUrl.searchParams.delete('category');
+            - let suburlCategory = subUpdatedUrl.toString()
+            - suburlCategory = suburlCategory.split('?').length <= 1 ? `${suburlCategory}?` :`${suburlCategory}&`;
+            - suburlCategory = new URL(suburlCategory);
+            -  suburlCategory = suburlCategory.href.split(suburlCategory.origin)[1]
+            - subParams = !!subParams ? subParams : ""
+            each docs,j in doc.subCategories
+                .form-check.ms-3.mt-2 
+                    - let subuParams = subParams;
+                    - const subcateCheck = subuParams === docs ? true :false;
+                    - subuParams = subcateCheck ? "" : docs;
+                    input.form-check-input(type='checkbox' value='',checked=subcateCheck && cateCheck ? true : false 
+                    onClick=`window.location = '${suburlCategory}category=${doc.name}&subCategory=${subuParams}';`,id=`sub-cat-check-${i}${j}` )
+                    label.form-check-label(for=`sub-cat-check-${i}${j}`)= docs
 
         // Price Filter
     h6.mb-2.mt-4.text-dark.fw-bold Price 
@@ -141,7 +160,7 @@ block block
         .container-fluid
             .row
                 // Filter Section
-                .col-sm-3
+                .col-md-3
                     .bg-white.p-3
                         p.text-secondary.fw-bold Fillter here
                         #accordionPanelsStayOpenExample.accordion
@@ -156,6 +175,7 @@ block block
                                         - updatedUrl.searchParams.get('category');
                                         - let params = updatedUrl.searchParams.get('category');
                                         - updatedUrl.searchParams.delete('category');
+                                        - updatedUrl.searchParams.delete('subCategory');
                                         - let urlCategory = updatedUrl.toString()
                                         - urlCategory = urlCategory.split('?').length <= 1 ? `${urlCategory}?` :`${urlCategory}&`;
                                         - urlCategory = new URL(urlCategory);
@@ -163,14 +183,32 @@ block block
                                         - params = !!params ? params : ""
                                         each doc,i in category
                                             .form-check
-                                                - let uParams = params.split(',');
-                                                - const cateCheck = uParams.includes(doc.name) ? true :false;
-                                                - const index = uParams.indexOf(doc.name);
-                                                - cateCheck ? uParams.splice(index,1) : uParams.push(doc.name) ;
+                                                - let uParams = params;
+                                                - const cateCheck = uParams === doc.name ? true :false;
+                                                - uParams = cateCheck ? "" : doc.name;
+                                                - console.log(url)
                                                 input.form-check-input(type='checkbox' value='',checked=cateCheck 
-                                                onClick=`window.location = '${urlCategory}category=${uParams.join(',').replace(/(^,|,$|,,)/g, '')}';`,id=`cat-check-${i}` )
+                                                onClick=`window.location = '${urlCategory}category=${uParams}';`,id=`cat-check-${i}` )
                                                 label.form-check-label(for=`cat-check-${i}`)
                                                     | #{doc.name}
+                                                - let subUpdatedUrl = new URL(url);
+                                                - subUpdatedUrl.searchParams.get('subCategory');
+                                                - let subParams = subUpdatedUrl.searchParams.get('subCategory');
+                                                - subUpdatedUrl.searchParams.delete('subCategory');
+                                                - subUpdatedUrl.searchParams.delete('category');
+                                                - let suburlCategory = subUpdatedUrl.toString()
+                                                - suburlCategory = suburlCategory.split('?').length <= 1 ? `${suburlCategory}?` :`${suburlCategory}&`;
+                                                - suburlCategory = new URL(suburlCategory);
+                                                -  suburlCategory = suburlCategory.href.split(suburlCategory.origin)[1]
+                                                - subParams = !!subParams ? subParams : ""
+                                                each docs,j in doc.subCategories
+                                                    .form-check.ms-3.mt-2 
+                                                        - let subuParams = subParams;
+                                                        - const subcateCheck = subuParams === docs ? true :false;
+                                                        - subuParams = subcateCheck ? "" : docs;
+                                                        input.form-check-input(type='checkbox' value='',checked=subcateCheck && cateCheck ? true : false 
+                                                        onClick=`window.location = '${suburlCategory}category=${doc.name}&subCategory=${subuParams}';`,id=`sub-cat-check-${i}${j}` )
+                                                        label.form-check-label(for=`sub-cat-check-${i}${j}`)= docs
                             // Price Filter
                             .accordion-item
                                 h2.accordion-header
@@ -370,7 +408,7 @@ block block
 
                                             .d-grid
                                                 a.btn-block.cursor-pointer.btn-main.rounded.fw-bold.mt-1.add_to_cart(data-id=doc.ecmpeId) Add to cart
-                        else if !docs.length && search
+                        else if !docs.length
                             .text-center
                                 img.w-50.m-auto.text-center(src='/Assets/Images/404.jpg' alt='mouse corsair')
                             p.text-center.m-2.text-lead.h4.fw-bold This product is currently not available or Search not found.
