@@ -1,23 +1,44 @@
 extends layout/base
 
 block block 
+
   .m-auto
     h3.logo.text-dark.text-center.mt-4
-      | Akstar
+      | Logo
       span.logo-sub.color-y .com
     .input-shadow.rounded.bg-white.w-50.m-auto.mt-4.mb-4.width-100
-      .text-center
-      .p-1.justify-content-center.text-center
-      .card.shadow.p-3
-        h5.fw-bold.mb-3 NEW LOGIN
-        form#send_otp
-            input#phone_num.form-control.w-75.m-auto.mb-3.bg-light(type='text' placeholder='Mobile Number')           
-            .d-grid
-              button.btn-block.buy-now(type="submit") CONTINUE
-            p.product-des.mt-3 Have trouble logging in?  
-              span.color-main.fw-bold Get help
-            #otp_section.d-none
-              input#verification_otp.form-control.w-50.mb-3.m-auto.mt-3.bg-light(type='text' placeholder='Enter OTP')
+      ul.nav.nav-pills.d-flex.justify-content-center
+        li.nav-item
+          a.nav-link.active(data-bs-toggle='pill' href='#home') Login 
+        li.nav-item
+          a.nav-link(data-bs-toggle='pill' href='#menu1') Sign Up
+
+      .tab-content
+        #home.tab-pane.container.active.mt-2
+          .card.shadow.p-3
+            h5.fw-bold.mb-3 User Login
+            form#send_otp
+              input#phone_num.form-control.w-75.m-auto.mb-3.bg-light(type='text' placeholder='Mobile Number')           
               .d-grid
-                button.btn-block#verify_otp.buy-now(type="button") LOGIN
-          
+                button.btn-block.buy-now(type="submit") CONTINUE
+              #otp_section.d-none
+                input#verification_otp.form-control.w-50.mb-3.m-auto.mt-3.bg-light(type='text' placeholder='Enter OTP')
+                .d-grid
+                  button.btn-block#verify_otp.buy-now(type="button") LOGIN
+        #menu1.tab-pane.container.fade ...
+          .card.shadow.p-3
+            h5.fw-bold.mb-3 New User
+            form#send_otpx
+              input#user_namex.form-control.w-75.m-auto.mb-3.bg-light(type='text' placeholder='User Name')           
+              input#phone_numx.form-control.w-75.m-auto.mb-3.bg-light(type='text' placeholder='Mobile Number')           
+              .d-grid
+                button.btn-block.buy-now(type="submit") CONTINUE
+              #otp_sectionx.d-none
+                input#verification_otpx.form-control.w-50.mb-3.m-auto.mt-3.bg-light(type='text' placeholder='Enter OTP')
+                .d-grid
+                  button.btn-block#verify_otpx.buy-now(type="button") Sign up
+
+
+
+
+

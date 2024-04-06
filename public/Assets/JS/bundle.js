@@ -26417,10 +26417,15 @@ var _axios = _interopRequireDefault(require("axios"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return { value: void 0, done: !0 }; } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable || "" === iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } throw new TypeError(_typeof(iterable) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var sendOtp = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(phone) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(phone, qry) {
     var _err$response;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
@@ -26428,17 +26433,16 @@ var sendOtp = /*#__PURE__*/function () {
           _context.prev = 0;
           _context.next = 3;
           return (0, _axios.default)({
-            method: 'POST',
-            url: '/api/v1/user/user-otp',
-            data: {
-              phone: phone
-            }
+            method: "POST",
+            url: "/api/v1/user/user-otp?".concat(qry, "=true"),
+            data: _objectSpread({}, phone)
           }).then(function (res) {
-            if (res.data.status === 'Success') {
-              var elmt = document.getElementById('otp_section');
-              elmt.classList.add('d-block');
-              elmt.classList.remove('d-none');
-              document.getElementById('verification_otp').value = res.data.otp;
+            if (res.data.status === "Success") {
+              var elmt;
+              if (qry === "login") elmt = document.getElementById("otp_section");else elmt = document.getElementById("otp_sectionx");
+              elmt.classList.add("d-block");
+              elmt.classList.remove("d-none");
+              if (qry === "login") document.getElementById("verification_otp").value = res.data.otp;else document.getElementById("verification_otpx").value = res.data.otp;
             }
           });
         case 3:
@@ -26453,14 +26457,14 @@ var sendOtp = /*#__PURE__*/function () {
           }
           return _context.abrupt("return", alert(_context.t0.response.data.message));
         case 11:
-          return _context.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context.stop();
       }
     }, _callee, null, [[0, 5]]);
   }));
-  return function sendOtp(_x) {
+  return function sendOtp(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -26474,15 +26478,15 @@ var verifyOtp = /*#__PURE__*/function () {
           _context2.prev = 0;
           _context2.next = 3;
           return (0, _axios.default)({
-            method: 'PATCH',
-            url: '/api/v1/user/verify-user',
+            method: "PATCH",
+            url: "/api/v1/user/verify-user",
             data: {
               phone: phone,
               otp: otp
             }
           }).then(function (res) {
-            if (res.data.status === 'Success') {
-              return location.assign('/');
+            if (res.data.status === "Success") {
+              return location.assign("/");
             }
           });
         case 3:
@@ -26497,14 +26501,14 @@ var verifyOtp = /*#__PURE__*/function () {
           }
           return _context2.abrupt("return", alert(_context2.t0.response.data.message));
         case 11:
-          return _context2.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context2.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context2.stop();
       }
     }, _callee2, null, [[0, 5]]);
   }));
-  return function verifyOtp(_x2, _x3) {
+  return function verifyOtp(_x3, _x4) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -26518,12 +26522,12 @@ var updateUser = /*#__PURE__*/function () {
           _context3.prev = 0;
           _context3.next = 3;
           return (0, _axios.default)({
-            method: 'PATCH',
-            url: '/api/v1/user/update-me',
+            method: "PATCH",
+            url: "/api/v1/user/update-me",
             data: data
           }).then(function (res) {
-            if (res.data.status === 'Success') {
-              alert('Your details updated successfully.');
+            if (res.data.status === "Success") {
+              alert("Your details updated successfully.");
               return location.reload();
             }
           });
@@ -26539,14 +26543,14 @@ var updateUser = /*#__PURE__*/function () {
           }
           return _context3.abrupt("return", alert(_context3.t0.response.data.message));
         case 11:
-          return _context3.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context3.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context3.stop();
       }
     }, _callee3, null, [[0, 5]]);
   }));
-  return function updateUser(_x4) {
+  return function updateUser(_x5) {
     return _ref3.apply(this, arguments);
   };
 }();
@@ -26579,11 +26583,11 @@ var addToWishlist = /*#__PURE__*/function () {
           _context.prev = 0;
           _context.next = 3;
           return (0, _axios.default)({
-            method: 'POST',
+            method: "POST",
             url: "/api/v1/user/wishlist/".concat(id)
           }).then(function (res) {
-            if (res.data.status === 'Success') {
-              return alert('Product added your wishlist.');
+            if (res.data.status === "Success") {
+              return alert("Product added your wishlist.");
             }
           });
         case 3:
@@ -26598,7 +26602,7 @@ var addToWishlist = /*#__PURE__*/function () {
           }
           return _context.abrupt("return", alert(_context.t0.response.data.message));
         case 11:
-          return _context.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context.stop();
@@ -26619,12 +26623,13 @@ var addToCart = /*#__PURE__*/function () {
           _context2.prev = 0;
           _context2.next = 3;
           return (0, _axios.default)({
-            method: 'POST',
+            method: "POST",
             url: "/api/v1/user/cart/".concat(id),
             data: data
           }).then(function (res) {
-            if (res.data.status === 'Success') {
-              return alert('Product added your cart.');
+            if (res.data.status === "Success") {
+              alert("Product added your cart.");
+              return location.reload();
             }
           });
         case 3:
@@ -26639,7 +26644,7 @@ var addToCart = /*#__PURE__*/function () {
           }
           return _context2.abrupt("return", alert(_context2.t0.response.data.message));
         case 11:
-          return _context2.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context2.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context2.stop();
@@ -26660,12 +26665,12 @@ var buyProduct = /*#__PURE__*/function () {
           _context3.prev = 0;
           _context3.next = 3;
           return (0, _axios.default)({
-            method: 'POST',
+            method: "POST",
             url: "/api/v1/user/product/assign-order",
             data: data
           }).then(function (res) {
-            if (res.data.status === 'Success') {
-              return location.assign('/order/checkout');
+            if (res.data.status === "Success") {
+              return location.assign("/order/checkout");
             }
           });
         case 3:
@@ -26680,7 +26685,7 @@ var buyProduct = /*#__PURE__*/function () {
           }
           return _context3.abrupt("return", alert(_context3.t0.response.data.message));
         case 11:
-          return _context3.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context3.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context3.stop();
@@ -26693,23 +26698,23 @@ var buyProduct = /*#__PURE__*/function () {
 }();
 exports.buyProduct = buyProduct;
 var listenerForImgGallery = function listenerForImgGallery() {
-  _toConsumableArray(document.querySelectorAll('.small-product-img')).map(function (el) {
-    el.addEventListener('click', function (e) {
+  _toConsumableArray(document.querySelectorAll(".small-product-img")).map(function (el) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
-      var main_image = document.querySelector('.main-product-img');
+      var main_image = document.querySelector(".main-product-img");
       main_image.src = el.src;
     });
   });
 };
 var setSizeDetails = function setSizeDetails(vals) {
-  var size_selection = document.getElementById('size_selection');
-  size_selection.addEventListener('change', function (e) {
+  var size_selection = document.getElementById("size_selection");
+  size_selection.addEventListener("change", function (e) {
     vals.map(function (el) {
       if (el.ecmpssId === e.target.value) {
         var pri_html = el.discountPrice ? "\n            <span>Rs. ".concat(el.discountPrice, "</span>\n            <span class=\"text-decoration-line-through text-secondary fw-normal fs-6\">Rs.").concat(el.price, "</span>\n            <span class=\"main-light fs-6\"> (").concat(Math.floor((el.price - el.discountPrice) / el.price * 100), "% OFF)</span>\n            ") : " <span>Rs. ".concat(el.price, "</span>");
-        var htmls = document.getElementById('price_details');
+        var htmls = document.getElementById("price_details");
         htmls.replaceChildren();
-        htmls.insertAdjacentHTML('beforeend', pri_html);
+        htmls.insertAdjacentHTML("beforeend", pri_html);
       }
     });
   });
@@ -26723,49 +26728,49 @@ var getAdditionalDetails = /*#__PURE__*/function () {
           _context4.prev = 0;
           _context4.next = 3;
           return (0, _axios.default)({
-            method: 'POST',
+            method: "POST",
             url: "/api/v1/product/additional-details/".concat(id),
             data: data
           }).then(function (res) {
-            if (res.data.status === 'Success') {
+            if (res.data.status === "Success") {
               var vals = res.data.docs;
-              if (vals.type === 'colorOnly') {
-                var main_image = document.querySelector('.main-product-img');
-                var gal_img = document.getElementById('gal_image');
+              if (vals.type === "colorOnly") {
+                var main_image = document.querySelector(".main-product-img");
+                var gal_img = document.getElementById("gal_image");
                 gal_img.replaceChildren();
                 var html = vals.imageGallery.map(function (el) {
                   return "<img class=\"m-0 small-product-img\" src=\"".concat(el, "\" alt=\"mouse corsair\">");
-                }).join('');
-                gal_img.insertAdjacentHTML('beforeend', html);
+                }).join("");
+                gal_img.insertAdjacentHTML("beforeend", html);
                 main_image.src = vals.bannerImage;
                 var pri_html = vals.subDetails[0].discountPrice ? "\n                <span>Rs. ".concat(vals.subDetails[0].discountPrice, "</span>\n                <span class=\"text-decoration-line-through text-secondary fw-normal fs-6\">Rs.").concat(vals.subDetails[0].price, "</span>\n                <span class=\"main-light fs-6\"> (").concat(Math.floor((vals.subDetails[0].price - vals.subDetails[0].discountPrice) / vals.subDetails[0].price * 100), "% OFF)</span>\n                ") : " <span>Rs. ".concat(vals.subDetails[0].price, "</span>");
-                var price_details = document.getElementById('price_details');
+                var price_details = document.getElementById("price_details");
                 price_details.replaceChildren();
-                price_details.insertAdjacentHTML('beforeend', pri_html);
+                price_details.insertAdjacentHTML("beforeend", pri_html);
                 return listenerForImgGallery();
-              } else if (vals.type === 'colorWithSize') {
-                var _main_image = document.querySelector('.main-product-img');
-                var _gal_img = document.getElementById('gal_image');
+              } else if (vals.type === "colorWithSize") {
+                var _main_image = document.querySelector(".main-product-img");
+                var _gal_img = document.getElementById("gal_image");
                 _gal_img.replaceChildren();
                 var _html = vals.imageGallery.map(function (el) {
                   return "<img class=\"m-0 small-product-img\" src=\"".concat(el, "\" alt=\"mouse corsair\">");
-                }).join('');
-                _gal_img.insertAdjacentHTML('beforeend', _html);
+                }).join("");
+                _gal_img.insertAdjacentHTML("beforeend", _html);
                 _main_image.src = vals.bannerImage;
-                var size_selection = document.getElementById('size_selection');
+                var size_selection = document.getElementById("size_selection");
                 size_selection.replaceChildren();
-                var _price_details = document.getElementById('price_details');
+                var _price_details = document.getElementById("price_details");
                 var size_html = vals.subDetails.map(function (el, i) {
                   if (i === 0) {
                     var _pri_html = el.discountPrice ? "\n                                <span>Rs. ".concat(el.discountPrice, "</span>\n                                <span class=\"text-decoration-line-through text-secondary fw-normal fs-6\">Rs.").concat(el.price, "</span>\n                                <span class=\"main-light fs-6\"> (").concat(Math.floor((el.price - el.discountPrice) / el.price * 100), "% OFF)</span>\n                                ") : " <span>Rs. ".concat(el.price, "</span>");
                     _price_details.replaceChildren();
-                    _price_details.insertAdjacentHTML('beforeend', _pri_html);
+                    _price_details.insertAdjacentHTML("beforeend", _pri_html);
                     return "<option value=".concat(el.ecmpssId, " selected>").concat(el.size, "</option>");
                   } else {
                     return "<option value=".concat(el.ecmpssId, " >").concat(el.size, "</option>");
                   }
-                }).join('');
-                size_selection.insertAdjacentHTML('beforeend', size_html);
+                }).join("");
+                size_selection.insertAdjacentHTML("beforeend", size_html);
                 listenerForImgGallery();
                 return setSizeDetails(vals.subDetails);
               }
@@ -26783,7 +26788,7 @@ var getAdditionalDetails = /*#__PURE__*/function () {
           }
           return _context4.abrupt("return", alert(_context4.t0.response.data.message));
         case 11:
-          return _context4.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context4.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context4.stop();
@@ -26804,24 +26809,24 @@ var moveCartToCart = /*#__PURE__*/function () {
           _context6.prev = 0;
           _context6.next = 3;
           return (0, _axios.default)({
-            method: 'DELETE',
+            method: "DELETE",
             url: "/api/v1/user/wishlist/".concat(id)
           }).then( /*#__PURE__*/function () {
             var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(res) {
               return _regeneratorRuntime().wrap(function _callee5$(_context5) {
                 while (1) switch (_context5.prev = _context5.next) {
                   case 0:
-                    if (!(res.data.status === 'Success')) {
+                    if (!(res.data.status === "Success")) {
                       _context5.next = 3;
                       break;
                     }
                     _context5.next = 3;
                     return (0, _axios.default)({
-                      method: 'POST',
+                      method: "POST",
                       url: "/api/v1/user/cart/".concat(id2)
                     }).then(function (res) {
-                      if (res.data.status === 'Success') {
-                        alert('Product Successfully moved to cart.');
+                      if (res.data.status === "Success") {
+                        alert("Product Successfully moved to cart.");
                         location.reload();
                       }
                     });
@@ -26847,7 +26852,7 @@ var moveCartToCart = /*#__PURE__*/function () {
           }
           return _context6.abrupt("return", alert(_context6.t0.response.data.message));
         case 11:
-          return _context6.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context6.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context6.stop();
@@ -26868,12 +26873,12 @@ var sendEmail = /*#__PURE__*/function () {
           _context7.prev = 0;
           _context7.next = 3;
           return (0, _axios.default)({
-            method: 'POST',
-            url: '/api/v1/user/send-mail',
+            method: "POST",
+            url: "/api/v1/user/send-mail",
             data: data
           }).then(function (res) {
-            if (res.data.status === 'Success') {
-              alert('Your requrest submited successfully.');
+            if (res.data.status === "Success") {
+              alert("Your requrest submited successfully.");
               return location.reload();
             }
           });
@@ -26889,7 +26894,7 @@ var sendEmail = /*#__PURE__*/function () {
           }
           return _context7.abrupt("return", alert(_context7.t0.response.data.message));
         case 11:
-          return _context7.abrupt("return", alert('Somthing went wrong. Please try again.'));
+          return _context7.abrupt("return", alert("Somthing went wrong. Please try again."));
         case 12:
         case "end":
           return _context7.stop();
@@ -27291,51 +27296,79 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-var send_otp = document.getElementById('send_otp');
-var verify_otp = document.getElementById('verify_otp');
-var add_to_wishlist = document.querySelectorAll('.add_to_wishlist');
-var small_product_img = document.querySelectorAll('.small-product-img');
-var selection_image = document.querySelectorAll('.selection_image');
-var product_id = document.getElementById('product_id');
-var pagination_manage = document.querySelectorAll('.pagination_manage');
-var sub_quantity = document.querySelectorAll('.sub_quantity');
-var add_quantity = document.querySelectorAll('.add_quantity');
-var add_to_cart = document.querySelectorAll('.add_to_cart');
-var buy_order = document.querySelectorAll('.buy_order');
-var add_new_address = document.getElementById('add_new_address');
-var delete_address = document.querySelectorAll('.delete_address');
-var confirm_order = document.getElementById('confirm_order');
-var place_order = document.getElementById('place_order');
-var cart_to_checkout = document.getElementById('cart_to_checkout');
-var remove_cart = document.querySelectorAll('.remove_cart');
-var remove_wishlist = document.querySelectorAll('.remove_wishlist');
-var update_address = document.querySelectorAll('.update_address');
-var cancel_order = document.querySelectorAll('.cancel_order');
-var udpate_user = document.getElementById('udpate_user');
-var send_email = document.getElementById('send_email');
-var move_cart = document.querySelectorAll('.move_cart');
+var send_otp = document.getElementById("send_otp");
+var verify_otp = document.getElementById("verify_otp");
+var send_otpx = document.getElementById("send_otpx");
+var verify_otpx = document.getElementById("verify_otpx");
+var add_to_wishlist = document.querySelectorAll(".add_to_wishlist");
+var small_product_img = document.querySelectorAll(".small-product-img");
+var selection_image = document.querySelectorAll(".selection_image");
+var product_id = document.getElementById("product_id");
+var pagination_manage = document.querySelectorAll(".pagination_manage");
+var sub_quantity = document.querySelectorAll(".sub_quantity");
+var add_quantity = document.querySelectorAll(".add_quantity");
+var add_to_cart = document.querySelectorAll(".add_to_cart");
+var buy_order = document.querySelectorAll(".buy_order");
+var add_new_address = document.getElementById("add_new_address");
+var delete_address = document.querySelectorAll(".delete_address");
+var confirm_order = document.getElementById("confirm_order");
+var place_order = document.getElementById("place_order");
+var cart_to_checkout = document.getElementById("cart_to_checkout");
+var remove_cart = document.querySelectorAll(".remove_cart");
+var remove_wishlist = document.querySelectorAll(".remove_wishlist");
+var update_address = document.querySelectorAll(".update_address");
+var cancel_order = document.querySelectorAll(".cancel_order");
+var udpate_user = document.getElementById("udpate_user");
+var send_email = document.getElementById("send_email");
+var move_cart = document.querySelectorAll(".move_cart");
 if (send_otp) {
-  send_otp.addEventListener('submit', function (e) {
+  send_otp.addEventListener("submit", function (e) {
     e.preventDefault();
-    var phone = document.getElementById('phone_num').value;
-    if (!phone) return alert('Please enter the phone number.');
-    if (phone.length !== 10) return alert('Phone number shoule be 10 numbers.');
-    return (0, _sharedControllers.sendOtp)(phone);
+    var phone = document.getElementById("phone_num").value;
+    if (!phone) return alert("Please enter the phone number.");
+    if (phone.length !== 10) return alert("Phone number shoule be 10 numbers.");
+    return (0, _sharedControllers.sendOtp)({
+      phone: phone
+    }, "login");
   });
 }
 if (verify_otp) {
-  verify_otp.addEventListener('click', function (e) {
+  verify_otp.addEventListener("click", function (e) {
     e.preventDefault();
-    var phone = document.getElementById('phone_num').value;
-    var otp = document.getElementById('verification_otp').value;
-    if (!phone) return alert('Please enter the phone number.');
-    if (!otp) return alert('Please enter the otp.');
+    var phone = document.getElementById("phone_num").value;
+    var otp = document.getElementById("verification_otp").value;
+    if (!phone) return alert("Please enter the phone number.");
+    if (!otp) return alert("Please enter the otp.");
+    return (0, _sharedControllers.verifyOtp)(phone, otp);
+  });
+}
+if (send_otpx) {
+  send_otpx.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = document.getElementById("user_namex").value;
+    var phone = document.getElementById("phone_numx").value;
+    if (!phone) return alert("Please enter the phone number.");
+    if (!name) return alert("Please enter the user name.");
+    if (phone.length !== 10) return alert("Phone number shoule be 10 numbers.");
+    return (0, _sharedControllers.sendOtp)({
+      phone: phone,
+      name: name
+    }, "signup");
+  });
+}
+if (verify_otpx) {
+  verify_otpx.addEventListener("click", function (e) {
+    e.preventDefault();
+    var phone = document.getElementById("phone_numx").value;
+    var otp = document.getElementById("verification_otpx").value;
+    if (!phone) return alert("Please enter the phone number.");
+    if (!otp) return alert("Please enter the otp.");
     return (0, _sharedControllers.verifyOtp)(phone, otp);
   });
 }
 if (add_to_wishlist.length) {
   _toConsumableArray(add_to_wishlist).map(function (el) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
       return (0, _productControllers.addToWishlist)(el.dataset.id);
     });
@@ -27343,21 +27376,21 @@ if (add_to_wishlist.length) {
 }
 if (small_product_img.length) {
   _toConsumableArray(small_product_img).map(function (el) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
-      var main_image = document.querySelector('.main-product-img');
+      var main_image = document.querySelector(".main-product-img");
       main_image.src = el.src;
     });
   });
 }
 if (selection_image.length) {
   _toConsumableArray(selection_image).map(function (el) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
       if (selection_image.length) _toConsumableArray(selection_image).map(function (els) {
         if (els.dataset.color === el.dataset.color) {
-          els.classList.add('border-dark');
-        } else els.classList.remove('border-dark');
+          els.classList.add("border-dark");
+        } else els.classList.remove("border-dark");
       });
       return (0, _productControllers.getAdditionalDetails)(product_id.dataset.id, {
         color: el.dataset.color
@@ -27365,25 +27398,25 @@ if (selection_image.length) {
     });
   });
 }
-window.addEventListener('load', function (event) {
-  if (document.querySelector('.selection_image ')) document.querySelector('.selection_image ').click();
+window.addEventListener("load", function (event) {
+  if (document.querySelector(".selection_image ")) document.querySelector(".selection_image ").click();
 });
 if (pagination_manage.length) {
   var url = new URL(window.location.href);
   _toConsumableArray(pagination_manage).map(function (el) {
-    el.addEventListener('click', function (e) {
-      if (el.dataset.type === 'pre') {
-        var page = url.searchParams.get('page');
-        var page_no = document.getElementById('page_no').innerText;
+    el.addEventListener("click", function (e) {
+      if (el.dataset.type === "pre") {
+        var page = url.searchParams.get("page");
+        var page_no = document.getElementById("page_no").innerText;
         if (!page || page_no * 1 === 1) {
           return false;
         }
-        url.searchParams.set('page', page * 1 - 1);
+        url.searchParams.set("page", page * 1 - 1);
         return location.assign(url);
       }
-      if (el.dataset.type === 'next') {
-        var _page = url.searchParams.get('page');
-        url.searchParams.set('page', (!!_page ? _page : 1) * 1 + 1);
+      if (el.dataset.type === "next") {
+        var _page = url.searchParams.get("page");
+        url.searchParams.set("page", (!!_page ? _page : 1) * 1 + 1);
         return location.assign(url);
       }
     });
@@ -27393,9 +27426,9 @@ if (pagination_manage.length) {
 // add
 if (add_quantity.length) {
   _toConsumableArray(add_quantity).map(function (el, i) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
-      var count_quantity = document.getElementsByClassName('count_quantity')[i];
+      var count_quantity = document.getElementsByClassName("count_quantity")[i];
       if (count_quantity.innerText * 1 === 10) {
         return false;
       }
@@ -27408,9 +27441,9 @@ if (add_quantity.length) {
 // add
 if (sub_quantity.length) {
   _toConsumableArray(sub_quantity).map(function (el, i) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
-      var count_quantity = document.getElementsByClassName('count_quantity')[i];
+      var count_quantity = document.getElementsByClassName("count_quantity")[i];
       if (count_quantity.innerText * 1 === 1) {
         return false;
       }
@@ -27420,12 +27453,12 @@ if (sub_quantity.length) {
 }
 if (add_to_cart.length) {
   _toConsumableArray(add_to_cart).map(function (el, i) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
       var color, size;
-      var size_selection = document.getElementById('size_selection');
+      var size_selection = document.getElementById("size_selection");
       if (size_selection) size = size_selection.value;
-      var color_selection = document.querySelector('img.selection_image.border-dark');
+      var color_selection = document.querySelector("img.selection_image.border-dark");
       if (color_selection) color = color_selection.dataset.color;
       var count_quantity = document.getElementsByClassName("count_quantity")[i].innerText;
       return (0, _productControllers.addToCart)(e.target.dataset.id, {
@@ -27438,14 +27471,14 @@ if (add_to_cart.length) {
 }
 if (buy_order.length) {
   _toConsumableArray(buy_order).map(function (el, i) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
       var color, size;
-      var size_selection = document.getElementById('size_selection');
+      var size_selection = document.getElementById("size_selection");
       if (size_selection) size = size_selection.value;
-      var color_selection = document.querySelector('img.selection_image.border-dark');
+      var color_selection = document.querySelector("img.selection_image.border-dark");
       if (color_selection) color = color_selection.dataset.color;
-      var count_quantity = document.getElementsByClassName('count_quantity')[i].innerText;
+      var count_quantity = document.getElementsByClassName("count_quantity")[i].innerText;
       return (0, _productControllers.buyProduct)([{
         id: product_id.dataset.id,
         quantity: count_quantity,
@@ -27458,17 +27491,17 @@ if (buy_order.length) {
 
 // add new address
 if (add_new_address) {
-  add_new_address.addEventListener('submit', function (e) {
+  add_new_address.addEventListener("submit", function (e) {
     e.preventDefault();
-    var name = document.getElementById('name').value;
-    var phone = document.getElementById('phone').value;
-    var phone1 = document.getElementById('phone1').value;
-    var country = document.getElementById('country').value;
-    var streetAddress = document.getElementById('streetAddress').value;
-    var town = document.getElementById('town').value;
-    var state = document.getElementById('state').value;
-    var zip = document.getElementById('zip').value;
-    var landmark = document.getElementById('landmark').value;
+    var name = document.getElementById("name").value;
+    var phone = document.getElementById("phone").value;
+    var phone1 = document.getElementById("phone1").value;
+    var country = document.getElementById("country").value;
+    var streetAddress = document.getElementById("streetAddress").value;
+    var town = document.getElementById("town").value;
+    var state = document.getElementById("state").value;
+    var zip = document.getElementById("zip").value;
+    var landmark = document.getElementById("landmark").value;
     return (0, _orderControllers.adNewAddress)({
       name: name,
       phone: phone,
@@ -27486,33 +27519,33 @@ if (add_new_address) {
 // delete address
 if (delete_address.length) {
   _toConsumableArray(delete_address).map(function (el) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
       return (0, _orderControllers.deleteAddress)(e.target.dataset.address);
     });
   });
 }
 if (confirm_order) {
-  confirm_order.addEventListener('click', function (e) {
+  confirm_order.addEventListener("click", function (e) {
     var address = document.querySelector('input[name="address"]:checked');
-    if (!address) return alert('Please select the address.');
+    if (!address) return alert("Please select the address.");
     return (0, _orderControllers.confirmOrder)(address.value);
   });
 }
 if (place_order) {
-  place_order.addEventListener('click', function (e) {
+  place_order.addEventListener("click", function (e) {
     return (0, _orderControllers.placeOrder)(e.target.dataset.id);
   });
 }
 if (cart_to_checkout) {
-  cart_to_checkout.addEventListener('click', /*#__PURE__*/function () {
+  cart_to_checkout.addEventListener("click", /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
       var cart, doc;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             e.preventDefault();
-            cart = document.querySelectorAll('.checkout_carts');
+            cart = document.querySelectorAll(".checkout_carts");
             _context.next = 4;
             return Promise.all(_toConsumableArray(cart).map(function (el) {
               return {
@@ -27536,31 +27569,31 @@ if (cart_to_checkout) {
 }
 if (remove_cart.length) {
   _toConsumableArray(remove_cart).map(function (el) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       return (0, _orderControllers.removeCart)(el.dataset.id);
     });
   });
 }
 if (remove_wishlist.length) {
   _toConsumableArray(remove_wishlist).map(function (el) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       return (0, _orderControllers.removeWishlist)(el.dataset.id);
     });
   });
 }
 if (update_address.length) {
   _toConsumableArray(update_address).map(function (el, i) {
-    el.addEventListener('submit', function (e) {
+    el.addEventListener("submit", function (e) {
       e.preventDefault();
-      var name = document.getElementsByClassName('name')[i].value;
-      var phone = document.getElementsByClassName('phone')[i].value;
-      var phone1 = document.getElementsByClassName('phone1')[i].value;
-      var country = document.getElementsByClassName('country')[i].value;
-      var streetAddress = document.getElementsByClassName('streetAddress')[i].value;
-      var town = document.getElementsByClassName('town')[i].value;
-      var state = document.getElementsByClassName('state')[i].value;
-      var zip = document.getElementsByClassName('zip')[i].value;
-      var landmark = document.getElementsByClassName('landmark')[i].value;
+      var name = document.getElementsByClassName("name")[i].value;
+      var phone = document.getElementsByClassName("phone")[i].value;
+      var phone1 = document.getElementsByClassName("phone1")[i].value;
+      var country = document.getElementsByClassName("country")[i].value;
+      var streetAddress = document.getElementsByClassName("streetAddress")[i].value;
+      var town = document.getElementsByClassName("town")[i].value;
+      var state = document.getElementsByClassName("state")[i].value;
+      var zip = document.getElementsByClassName("zip")[i].value;
+      var landmark = document.getElementsByClassName("landmark")[i].value;
       return (0, _orderControllers.updateAddress)(el.dataset.id, {
         name: name,
         phone: phone,
@@ -27577,17 +27610,17 @@ if (update_address.length) {
 }
 if (cancel_order.length) {
   _toConsumableArray(cancel_order).map(function (el) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
       return (0, _orderControllers.cancelOrder)(el.dataset.id);
     });
   });
 }
 if (udpate_user) {
-  udpate_user.addEventListener('submit', function (e) {
+  udpate_user.addEventListener("submit", function (e) {
     e.preventDefault();
-    var name = document.getElementById('u_name').value;
-    var email = document.getElementById('u_email').value;
+    var name = document.getElementById("u_name").value;
+    var email = document.getElementById("u_email").value;
     return (0, _sharedControllers.updateUser)({
       name: name,
       email: email
@@ -27596,7 +27629,7 @@ if (udpate_user) {
 }
 if (move_cart.length) {
   _toConsumableArray(move_cart).map(function (el) {
-    el.addEventListener('click', function (e) {
+    el.addEventListener("click", function (e) {
       e.preventDefault();
       var id = e.target.dataset.id;
       return (0, _productControllers.moveCartToCart)(id, e.target.dataset.product);
@@ -27604,20 +27637,20 @@ if (move_cart.length) {
   });
 }
 if (send_email) {
-  send_email.addEventListener('submit', function (e) {
+  send_email.addEventListener("submit", function (e) {
     e.preventDefault();
     var form = new FormData();
-    form.append('firstName', document.getElementById('fname').value);
-    form.append('lastName', document.getElementById('flast').value);
-    form.append('email', document.getElementById('email').value);
-    form.append('phone', document.getElementById('phone').value);
-    form.append('order', document.getElementById('order').value);
-    if (document.getElementById('file').files) _toConsumableArray(document.getElementById('file').files).map(function (el) {
+    form.append("firstName", document.getElementById("fname").value);
+    form.append("lastName", document.getElementById("flast").value);
+    form.append("email", document.getElementById("email").value);
+    form.append("phone", document.getElementById("phone").value);
+    form.append("order", document.getElementById("order").value);
+    if (document.getElementById("file").files) _toConsumableArray(document.getElementById("file").files).map(function (el) {
       console.log(el);
-      form.append('file', el);
+      form.append("file", el);
     });
-    form.append('message', document.getElementById('message').value);
-    form.append('category', document.querySelector('input[name="flexRadioDefault"]:checked').value);
+    form.append("message", document.getElementById("message").value);
+    form.append("category", document.querySelector('input[name="flexRadioDefault"]:checked').value);
     return (0, _productControllers.sendEmail)(form);
   });
 }
@@ -27646,7 +27679,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51004" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50036" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

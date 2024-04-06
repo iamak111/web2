@@ -1595,6 +1595,7 @@ exports.myCarts = catchAsync(async (req, res, next) => {
             active: el.product.active,
             name: el.product.name,
             price: el.product.price,
+            category: el.product.categorie,
             discountPrice: el.product.discountPrice,
             type: "single",
             quantity: el.quantity,
@@ -1627,6 +1628,7 @@ exports.myCarts = catchAsync(async (req, res, next) => {
             active: el.product.active,
             name: el.product.name,
             color: color.color,
+            category: el.product.categorie,
             colorId: el.color,
             type: "colorOnly",
             quantity: el.quantity,
@@ -1661,6 +1663,7 @@ exports.myCarts = catchAsync(async (req, res, next) => {
             name: el.product.name,
             size: size.size,
             sizeId: el.size,
+            category: el.product.categorie,
             type: "sizeOnly",
             quantity: el.quantity,
             id: el.ecmcmID,
@@ -1705,6 +1708,7 @@ exports.myCarts = catchAsync(async (req, res, next) => {
                     colVals.product = el.productEId;
                     colVals.colorId = els.ecmpsId;
                     colVals.sizeId = els2.ecmpssId;
+                    colVals.category = el.product.categorie;
                   })
                 );
               }
@@ -1726,6 +1730,7 @@ exports.myCarts = catchAsync(async (req, res, next) => {
       }
     })
   );
+
   req.body = { products, price, discountPrice, finalPrice };
   return next();
 });

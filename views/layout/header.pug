@@ -16,10 +16,10 @@ nav.navbar.navbar-expand-lg.bg-body-tertiary.bg-white.border-bottom
         li.nav-item
           a.nav-link.fs-5(href='/wishlist') Wishlist
           
-      form.d-flex.ms-auto(role='search')
-        input.form-control.me-2#search_m(type='search' placeholder='Search' aria-label='Search')
-        button.btn.btn-outline-success.search_prdocuts_m(type='button')
-          | Search
+      .input-wrapper.d-flex.ms-auto
+          input.form-control.form-control-text.input-with-button#search_m(type='text' placeholder='Type something...')
+          button.btn.inside-button.search_prdocuts_m(type='button') Search
+
       .d-flex.mt-3.ms-3
         a.d-flex(href='/cart')
           i.bi.bi-cart.ms-2.text-dark

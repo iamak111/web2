@@ -35,10 +35,36 @@ block block
             button.carousel-control-next(type='button' data-bs-target='#carouselExampleDark' data-bs-slide='next')
                 span.carousel-control-next-icon(aria-hidden='true')
                 span.visually-hidden Next
-    section.container.pb-5
+    section.container-fluid.pb-5.container
         h1.text-center.text-secondary.fw-bold.mt-5
             | Now shipping everywhere in Ghana
-        .row.row-cols-2.row-cols-md-4.g-4.mt-4
+        div(style='display:flex;justify-content:space-between; width:85%;margin:0px auto 30px;align-items:center')
+            div
+            div(style='display:flex;align-items:center')
+                button.btn.btn-default.grid-view.content_display.active_crop
+                    i.bi.bi-border-all(style="font-size:25px;")
+                button.btn.btn-default.list-view.content_display
+                    i.bi.bi-border-width(style="font-size:25px;")
+                script. 
+                    [...document.querySelectorAll(".content_display")].map((el,i)=>{
+                        el.addEventListener("click",(e)=>{
+                            if(i === 0){
+                                document.getElementsByClassName('content_display')[0].classList.add("active_crop");
+                                document.getElementsByClassName('content_display')[1].classList.remove("active_crop");
+                                document.getElementById('grid_view').style.display = "flex";
+                                document.getElementById('list_view').style.display = "none";
+
+                            }
+                                else{document.getElementsByClassName('content_display')[1].classList.add("active_crop");
+                                document.getElementsByClassName('content_display')[0].classList.remove("active_crop");
+                                document.getElementById('grid_view').style.display = "none";
+                                document.getElementById('list_view').style.display = "block";
+                                }
+                        })
+                    })
+
+
+        .row.row-cols-2.row-cols-md-4.g-4.mt-4#grid_view
             each doc in docs.recommendedProduct
                 .col
                     .card.h-100.border-0.bg-light
@@ -75,6 +101,43 @@ block block
                                         | +
                             .col-sm-6.d-flex.justify-content-center
                                 a.cursor-pointer.btn-main.rounded.fw-bold.mt-1.add_to_cart(data-id=doc.ecmpeId) Add to cart
+
+        .g-4.mt-4#list_view(style="display:none;")
+            each doc in docs.recommendedProduct
+                .col.mb-3
+                    .d-flex.justify-content-between.p-2.border-bottom
+                        a.align-self-center(href=`/shop/product/${doc.slug}` style="max-width:20vw;")  
+                            img.card-img-top(src=doc.bannerImage alt='...' style="width:70%;height:auto;")
+                        a.align-self-center(href=`/shop/product/${doc.slug}` style="width:20vw;")    
+                            h5.text-dark.one-line= doc.name
+                        div.align-self-center(style="width:35vw;")  
+                            if doc.discountPrice
+                                h5.p-0.text-center.mt-2.text-dark.pe-2.text-break(style="margin:10px;")
+                                    | Rs.#{doc.discountPrice}
+                                    span.text-secondary.fw-normal.text-decoration-line-through.product-des.pe-2.ps-2 Rs.#{doc.price}
+                                    //- span.fw-normal.main-light.product-des.pe-2
+                                        | (#{Math.floor(((doc.price-doc.discountPrice)/doc.price)*100)}% OFF)
+                            else
+                                p.p-0.m-0.fw-bold.text-center.mt-2.pe-2
+                                    | Rs.#{doc.price}
+                        div.align-self-center(style="width:20vw;")  
+                            .row
+                                .col-lg-4.d-flex.justify-content-center
+                                    p.cursor-pointer.rounded.fw-bold.mt-1()= doc.active ? "In Stock" : "Out of Stock"
+                                .col-lg-4
+                                    .d-flex.justify-content-center
+                                        p.m-0.cursor-pointer.border.border-2.border-dark.p-1.ps-2.me-1.pe-2.text-center.rounded.sub_quantity
+                                            | -
+                                        p.m-0.card-text.border.border-2.border-dark.p-1.text-center.rounded.ps-3.pe-3.count_quantity
+                                            | 1
+                                        p.m-0.cursor-pointer.border.p-0.border-2.border-dark.p-1.ps-2.ms-1.pe-2.text-center.rounded.add_quantity
+                                            | +
+                                .col-lg-4.d-flex.justify-content-center
+                                    a.cursor-pointer.btn-main.rounded.fw-bold.mt-1.add_to_cart(data-id=doc.ecmpeId) Add to cart
+
+
+
+
     section.bg-light
         .container.pt-5.pb-5
             h3.text-center.fw-bold.text-dark
