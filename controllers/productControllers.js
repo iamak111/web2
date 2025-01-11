@@ -173,7 +173,8 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
         vendorEId: req.user.ecmuId,
         slug: slugify(req.body.name, { lower: true }),
         categorie: categorie.name,
-        for: categorie.for,
+        subCategory: req.body.subCategory,
+        for: process.env.WEBSITE_CATEGORY,
         description: req.body.description,
         productType: "single",
         bannerImage: req.body.bannerImage,
@@ -241,7 +242,8 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
         vendorEId: req.user.ecmuId,
         slug: slugify(req.body.name, { lower: true }),
         categorie: categorie.name,
-        for: categorie.for,
+        subCategory: req.body.subCategory,
+        for: process.env.WEBSITE_CATEGORY,
         description: req.body.description,
         productType: "colorOnly",
         bannerImage: req.body.bannerImage,
@@ -303,7 +305,8 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
         vendorEId: req.user.ecmuId,
         slug: slugify(req.body.name, { lower: true }),
         categorie: categorie.name,
-        for: categorie.for,
+        subCategory: req.body.subCategory,
+        for: process.env.WEBSITE_CATEGORY,
         description: req.body.description,
         productType: "sizeOnly",
         bannerImage: req.body.productDetails[0].bannerImage,
@@ -386,7 +389,8 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
         vendorEId: req.user.ecmuId,
         slug: slugify(req.body.name, { lower: true }),
         categorie: categorie.name,
-        for: categorie.for,
+        subCategory: req.body.subCategory,
+        for: process.env.WEBSITE_CATEGORY,
         description: req.body.description,
         productType: "colorWithSize",
         bannerImage: req.body.bannerImage,
@@ -402,7 +406,6 @@ exports.assignDataForCreateNewProduct = catchAsync(async (req, res, next) => {
       break;
   }
 });
-
 // assign data for craete new prouduct
 exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
   if (!req.body.productType)
@@ -454,7 +457,8 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
         discountPrice: req.body.discountPrice ?? 0,
         slug: slugify(req.body.name, { lower: true }),
         categorie: categorie.name,
-        for: categorie.for,
+        subCategory: req.body.subCategory,
+        for: process.env.WEBSITE_CATEGORY,
         description: req.body.description,
         productType: "single",
         bannerImage: req.body.bannerImage,
@@ -519,7 +523,8 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
         discountPrice: req.body.discountPrice,
         slug: slugify(req.body.name, { lower: true }),
         categorie: categorie.name,
-        for: categorie.for,
+        subCategory: req.body.subCategory,
+        for: process.env.WEBSITE_CATEGORY,
         description: req.body.description,
         productType: "colorOnly",
         bannerImage: req.body.bannerImage,
@@ -578,7 +583,8 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
         discountPrice: req.body.discountPrice,
         slug: slugify(req.body.name, { lower: true }),
         categorie: categorie.name,
-        for: categorie.for,
+        subCategory: req.body.subCategory,
+        for: process.env.WEBSITE_CATEGORY,
         description: req.body.description,
         productType: "sizeOnly",
         bannerImage: req.body.productDetails[0].bannerImage,
@@ -658,7 +664,8 @@ exports.assignDataForUpdateNewProduct = catchAsync(async (req, res, next) => {
         discountPrice: req.body.discountPrice ?? 0,
         slug: slugify(req.body.name, { lower: true }),
         categorie: categorie.name,
-        for: categorie.for,
+        subCategory: req.body.subCategory,
+        for: process.env.WEBSITE_CATEGORY,
         description: req.body.description,
         productType: "colorWithSize",
         bannerImage: req.body.bannerImage,
@@ -1938,8 +1945,14 @@ exports.getVendorHome = catchAsync(async (req, res, next) => {
   );
   const [productsCount, ordersCount, [orderStates], products, orders] =
     await Promise.all([
-      productModel.count({ vendorId: req.user._id }),
-      ordermodel.count({ "productDetails.vendorId": req.user._id }),
+      productModel.count({
+        vendorId: req.user._id,
+        for: process.env.WEBSITE_CATEGORY,
+      }),
+      ordermodel.count({
+        "productDetails.vendorId": req.user._id,
+        "productDetails.for": process.env.WEBSITE_CATEGORY,
+      }),
       ordermodel.aggregate([
         {
           $match: {
@@ -1981,15 +1994,18 @@ exports.getVendorHome = catchAsync(async (req, res, next) => {
         },
       ]),
       productModel
-        .find({ vendorId: req.user._id })
+        .find({ vendorId: req.user._id, for: process.env.WEBSITE_CATEGORY })
         .sort({ createdAt: -1 })
         .limit(5),
       ordermodel
-        .find({ "productDetails.vendorId": req.user._id })
+        .find({
+          "productDetails.vendorId": req.user._id,
+          "productDetails.for": process.env.WEBSITE_CATEGORY,
+        })
         .sort({ createdAt: -1 })
         .limit(5),
     ]);
-
+  console.log(orderStates);
   return res.json({
     status: "Success",
     productsCount,
@@ -2007,6 +2023,7 @@ exports.getVendorOrders = catchAsync(async (req, res, next) => {
     ordermodel.aggregate([
       {
         $match: {
+          "productDetails.for": process.env.WEBSITE_CATEGORY,
           "productDetails.vendorId": req.user._id,
         },
       },
@@ -2046,10 +2063,12 @@ exports.getVendorOrders = catchAsync(async (req, res, next) => {
       },
     ]),
     ordermodel.count({
+      "productDetails.for": process.env.WEBSITE_CATEGORY,
       "productDetails.vendorId": req.user._id,
       "orderDetails.productOrderStatus": "pending",
     }),
     ordermodel.count({
+      "productDetails.for": process.env.WEBSITE_CATEGORY,
       "productDetails.vendorId": req.user._id,
       "orderDetails.productOrderStatus": { $ne: "pending" },
     }),
@@ -2060,6 +2079,7 @@ exports.getVendorOrders = catchAsync(async (req, res, next) => {
 
 exports.getOrderDetails = catchAsync(async (req, res, next) => {
   const order = await ordermodel.findOne({
+    "productDetails.for": process.env.WEBSITE_CATEGORY,
     "productDetails.vendorId": req.user._id,
     ecmorId: req.params.orderId,
   });
@@ -2072,17 +2092,21 @@ exports.getOrderDetails = catchAsync(async (req, res, next) => {
 exports.getMyProducts = catchAsync(async (req, res, next) => {
   const pgno = !!req.query?.page * 1 ? req.query?.page * 1 : 1;
   const products = await productModel
-    .find({ vendorId: req.user._id })
+    .find({ vendorId: req.user._id, for: process.env.WEBSITE_CATEGORY })
     .sort({ createdAt: -1 })
     .skip(((!!pgno ? pgno : 1) - 1) * 25)
     .limit(25);
-  const count = await productModel.count({ vendorId: req.user._id });
+  const count = await productModel.count({
+    vendorId: req.user._id,
+    for: process.env.WEBSITE_CATEGORY,
+  });
   return res.json({ status: "Success", docs: products, count });
 });
 
 exports.getMyProduct = catchAsync(async (req, res, next) => {
   const product = await productModel
     .findOne({
+      for: process.env.WEBSITE_CATEGORY,
       vendorId: req.user._id,
       ecmpeId: req.params.productId,
     })

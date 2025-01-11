@@ -154,7 +154,10 @@ exports.protectCart = catchAsync(async (req, res, next) => {
 });
 
 exports.verifyVendor = (req, res, next) => {
-  if (req.user.accountVerification !== "accepted")
+  if (
+    req.user.accountVerification !== "accepted" &&
+    req.user.for !== process.env.WEBSITE_CATEGORY
+  )
     return next(new AppError("Invalid vendor.", 400));
   return next();
 };
